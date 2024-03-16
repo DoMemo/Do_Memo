@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import HamburgerButton from 'lib/components/ui/button/HamburgerButton';
 import Logo from 'lib/components/ui/logo/Logo';
 import SideBar from './SideBar';
+import CancelBackground from 'lib/components/background/CancelBackground';
 
 const AppBar = () => {
   const [ isSideBarActive, setIsSideBarActive ] = useState(false);

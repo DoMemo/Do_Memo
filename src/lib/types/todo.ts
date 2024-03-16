@@ -1,8 +1,10 @@
+import { PICKER_COLOR } from "lib/enum/PickerColor"
+
 export interface Todo {
-  id: number | IDBValidKey | string,
+  id: string,
   text: string,
   checked: boolean,
-  color: string | undefined,
+  color: PICKER_COLOR | undefined,
   prevItemId: string | IDBValidKey | number | undefined,
   type: string,
   isDone: boolean,
@@ -11,7 +13,7 @@ export interface Todo {
 export interface CreateTodo {
   text: string,
   checked: boolean,
-  color: string | undefined,
+  color: PICKER_COLOR | undefined,
   prevItemId: string | IDBValidKey | number | undefined,
   type: string,
   isDone: boolean,
