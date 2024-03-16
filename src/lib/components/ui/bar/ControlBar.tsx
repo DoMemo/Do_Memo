@@ -3,6 +3,7 @@ import CircleButton from 'lib/components/ui/button/CircleButton';
 import SettingImg from 'assets/images/setting.png'
 import ToolBox from 'lib/components/tool/ToolBox';
 import { Tools } from 'lib/enum/Tools';
+import SettingBar from './SettingBar';
 
 const ControlBar = () => {
   return (
@@ -11,6 +12,7 @@ const ControlBar = () => {
         <ToolBox />
       </div>
       <div className='w-[48px] h-full flex items-center px-1 absolute top-0 right-1'>
+        <SettingBar />
         <CircleButton img={SettingImg} name={Tools.SETTING}/>
       </div>
     </div>

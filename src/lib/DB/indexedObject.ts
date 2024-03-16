@@ -18,3 +18,10 @@ export const deleteObject = async () => {
   const objectStore = db.transaction(INDEXED_DB.TODO_LIST, 'readwrite').objectStore(INDEXED_DB.TODO_LIST);
   return objectStore;
 }
+
+export const createCalendarObject = async () => {
+  const db = await initIndexedDB() as IDBDatabase;
+  const objectStore = db.transaction(INDEXED_DB.CALENDAR, 'readwrite').objectStore(INDEXED_DB.CALENDAR);
+  return objectStore;
+}
+

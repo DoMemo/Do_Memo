@@ -11,7 +11,7 @@ export class TodoService {
       request.onsuccess = async () => {
         const result = request.result;
         if(result) {
-          const getTodo = await this.getTodo(result);
+          const getTodo = await this.getTodo(result) as Todo;
 
           resolve(getTodo);
         }
@@ -74,6 +74,7 @@ export class TodoService {
       const request = store.delete(id);
       request.onsuccess = (event) => {
         resolve(request.result);
+        // undefined
       };
       request.onerror = () => {
         reject(request.error);

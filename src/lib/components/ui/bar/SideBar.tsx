@@ -4,8 +4,13 @@ const SideBar = ({direction, isActive}: {
   direction: string;
   isActive: boolean;
 }) => {
+  // 1. set State
   const [ mounted, setMounted ] = useState(false);
 
+  // 2. 선언형 함수들
+  // 예시로 렌더에 영향을 주거나 state를 변경하는 함수들 또는 Service이용하는 함수
+
+  // 3. useEffect 무조건 맨 마지막
   useEffect(() => {
     if(isActive) {
       setMounted(true);
@@ -16,6 +21,7 @@ const SideBar = ({direction, isActive}: {
     }
   }, [isActive] );
   
+  // return 
   return (
     <>
       {
@@ -28,6 +34,7 @@ const SideBar = ({direction, isActive}: {
   )
 }
 
+// 4. helper function
 function returnPathStyle(direction: string) {
   switch (direction) {
     case 'left':

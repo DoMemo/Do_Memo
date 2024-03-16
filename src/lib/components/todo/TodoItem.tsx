@@ -9,7 +9,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 const TodoItem = ({ todo }: {
   todo: Todo;
 }) => {
-  const { id, text, checked, color, type, isDone, date } = todo;
+  const { id, text, checked, color, type, isDone, date, prevItemId } = todo;
   const [ todoList, setTodoList ] = useRecoilState(todoState);
   const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
   const currentTool = useRecoilValue(toolState);

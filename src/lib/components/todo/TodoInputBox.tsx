@@ -25,6 +25,7 @@ const TodoInputBox = () => {
       text: value,
       checked: false,
       color: undefined,
+      prevItemId: undefined,
       type: TYPE.todo,
       isDone: false,
       date: returnToday(),
