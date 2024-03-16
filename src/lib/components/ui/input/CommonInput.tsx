@@ -16,13 +16,19 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   }
 
   useEffect(() => {
-    if(isFocus) inputElement.current?.focus();
+    if(isFocus) {
+      setTimeout(() => {
+        inputElement.current?.focus();
+      }, 310);
+    };
+
   }, [isFocus]);
 
   return (
     <input 
       className={`w-full h-[40px] bg-white border-2 border-gray-300 rounded-md px-4 focus:outline-none focus:border-blue-500 ${isShadow && 'shadow'}`}
       type="text"
+      autoFocus={true}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       ref={inputElement}
