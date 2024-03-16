@@ -39,7 +39,8 @@ const TodoItem = ({ todo }: {
     setIsEditMode((isEditMode) => !isEditMode);
   }
   return (
-    <div className={`relative w-full min-h-[50px] shadow flex flex-row items-center p-2 overflow-hidden ${isEditMode ? 'translate-y-[-30px] scale-[105%] shadow-[0px_30px_30px_-10px_rgba(0,0,0,0.2)]' : 'shadow'} duration-300 bg-white`}
+    <div 
+      className={`relative w-full min-h-[50px] shadow flex flex-row items-center p-2 overflow-hidden ${isEditMode ? 'translate-y-[-30px] scale-[105%] shadow-[0px_30px_30px_-10px_rgba(0,0,0,0.2)]' : 'shadow'} duration-300 bg-white`}
     >
       <div className='h-full flex items-center justify-center pr-2'>
         <input 
@@ -50,8 +51,11 @@ const TodoItem = ({ todo }: {
           onChange={handleCheck}
         />
       </div>
-      <div className='w-full flex flex-row'>
-        <p className={`${checked && 'line-through text-gray-400'} break-words w-11/12`}
+      <div 
+        className='w-full flex flex-row'
+      >
+        <p 
+          className={`${checked && 'line-through text-gray-400'} break-words w-11/12 text-start`}
           onClick={toggleEditMode}
         >
           {text}
