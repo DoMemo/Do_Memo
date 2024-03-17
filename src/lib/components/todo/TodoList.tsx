@@ -49,14 +49,14 @@ const TodoList = ({ scroll }: {
       list={todoList}
     >
       <div
-        className={`w-full h-full flex flex-col items-center justify-start gap-1 todolist`}
+        className={`w-full h-full flex flex-col items-center justify-start gap-1 todolist pt-2`}
       >
         <Droppable
           droppableId="droppable"
         >
           {(provided, snapshot) => (
             <div
-              className={`w-full h-full flex flex-col items-center justify-start gap-1 todolist`}
+              className={`w-full h-full flex flex-col items-center justify-start todolist`}
               ref={provided.innerRef}
             >
                 {
@@ -106,6 +106,7 @@ const TodoList = ({ scroll }: {
               )
             })
           }
+          <div className='w-full h-20'></div>
       </div>
     </FlipWrapper>
   )

@@ -16,8 +16,6 @@ export const uncheckedTodoList = selector({
         tampList.push(todoList[index]);
       }
     });
-    console.log(todoOrderList, 'todoOrderList');
-    console.log(tampList, 'tampList');
     return tampList;
   }
 });

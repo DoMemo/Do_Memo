@@ -8,7 +8,7 @@ const AppBar = () => {
   const [ isSideBarActive, setIsSideBarActive ] = useState(false);
 
   return (
-    <div className='w-full h-[50px] flex flex-row justify-between items-center shadow p-2 relative z-50'>
+    <div className='w-full h-[50px] flex flex-row justify-between items-center shadow-lg p-2 relative z-50'>
       <h1 className='sr-only'>Do!</h1>
       <Logo />
       <div className='absolute top-[15px] right-[10px] z-50'>

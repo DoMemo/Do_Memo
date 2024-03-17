@@ -13,9 +13,11 @@ export class TodoService {
         const result = request.result;
         if(result) {
           const getTodo = await this.getTodo(result) as Todo;
+          // dnd 순서를 위한 로직 시작
           const orderList = this.getTodoOrder();
           orderList.push(result);
           this.updateTodoOrder(orderList);
+          // dnd 순서를 위한 로직 끝
           resolve(getTodo);
         }
       };

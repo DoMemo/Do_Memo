@@ -19,7 +19,7 @@ const ControlBar = () => {
     }
   }
   return (
-    <div className='relative flex flex-row justify-between items-center w-full h-[60px] bg-white z-40'>
+    <div className='relative flex flex-row justify-between items-center w-full h-[68px]  z-40'>
       <PaletteBar />
       <div className='w-full h-full flex flex-row justify-center items-center'>
         <ToolBox />

@@ -8,7 +8,7 @@ const Starting = () => {
   return (
     <div className='w-full h-screen flex justify-center items-center'>
       <h1 className='font-bold text-2xl'>
-        Do! test
+        Do!
       </h1>
     </div>
   )

@@ -1,6 +1,7 @@
+import ScheduleWrapper from 'lib/components/calendar/schedule/ScheduleWrapper';
 import TodoInputBox from 'lib/components/todo/TodoInputBox'
 import TodoList from 'lib/components/todo/TodoList'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 const Home = () => {
   const bodyContainer = useRef<HTMLDivElement>(null);
@@ -20,6 +21,7 @@ const Home = () => {
         onScroll={handleScroll}
       >
         <TodoList scroll={scrollY} />
+        {/* <ScheduleWrapper /> */}
       </div>
     </div>
   )
