@@ -3,6 +3,7 @@ import { Tools } from 'lib/enum/Tools';
 import { toolState } from 'lib/store/ToolState';
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
+import SideBarLinks from './SideBarLinks';
 
 const SideBar = ({direction, isActive}: {
   direction: string;
@@ -33,7 +34,7 @@ const SideBar = ({direction, isActive}: {
       {
         mounted && 
           <div className={`w-10/12 h-screen bg-white shadow-lg absolute top-0 ${returnPathStyle(direction)} ${isActive ? "animate-slide-left" : "animate-slide-right"} z-40`}>
-            sidebar
+            <SideBarLinks />
           </div>
       }
     </>

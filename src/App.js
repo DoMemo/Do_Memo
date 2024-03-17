@@ -3,6 +3,7 @@ import './App.css';
 import Starting from './pages/starting/Starting.tsx';
 import Home from './pages/home/Home.tsx';
 import MainLayout from './layout/MainLayout.tsx';
+import Calendar from './pages/calendar/Calendar.tsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Starting />} />
           <Route element={<MainLayout />}>
             <Route path="/home" element={<Home />} />
+            <Route path="/calendar" element={<Calendar />} />
           </Route>
         </Routes>
       </BrowserRouter>
