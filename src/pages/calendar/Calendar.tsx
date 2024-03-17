@@ -1,9 +1,12 @@
-import React from 'react'
+import DateSelector from 'lib/components/calendar/calendarSection/DateSelector';
+import React from 'react';
 
 const Calendar = () => {
   return (
-    <div>Calendar</div>
-  )
-}
+    <div className="relative">
+      <DateSelector />
+    </div>
+  );
+};
 
-export default Calendar
+export default Calendar;
