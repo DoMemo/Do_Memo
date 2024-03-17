@@ -1,8 +1,9 @@
 import { TodoService } from 'lib/service/TodoService';
+import { toolState } from 'lib/store/ToolState';
 import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const FlipWrapper = ({ scroll, list, children }: {
   scroll: number;
@@ -10,6 +11,7 @@ const FlipWrapper = ({ scroll, list, children }: {
   children: React.ReactNode;
 }) => {
   const [ todoOrder, setTodoOrder ] = useRecoilState(todoOrderState);
+  const currentTool = useRecoilValue(toolState);
   const rectMap = useRef<Map<string, DOMRect>>(new Map()).current;
   const wrapperElement = useRef<HTMLDivElement>(null);
 
@@ -36,7 +38,7 @@ const FlipWrapper = ({ scroll, list, children }: {
         rectMap.set(id, currentRect);
       }
     });
-  }, [rectMap, scroll]);
+  }, [rectMap, scroll, currentTool]);
 
   useLayoutEffect(() => {
     const filppers = document.querySelectorAll('.fliper');

@@ -7,19 +7,20 @@ import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import { todoState } from 'lib/store/todoStore/todoState';
 import { Todo } from 'lib/types/todo'
 import detectSwipe from 'lib/util/detectSwipe';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 const TodoItem = ({ todo }: {
   todo: Todo;
 }) => {
-  const { id, text, checked, color, type, isDone, date, prevItemId } = todo;
+  const { id, title, text, checked, color, type, isDone, date, prevItemId } = todo;
   const [ isDelete, setIsDelete ] = useState(false);
   const [ todoList, setTodoList ] = useRecoilState(todoState);
   const [ todoOrder, setTodoOrder ] = useRecoilState(todoOrderState);
   const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
   const [ offset, setOffset ] = useState(null);
   const [ isActiveDelete, setIsActiveDelete ] = useState(false);
+  const textareaElement = useRef<HTMLTextAreaElement>(null);
   const currentColor = useRecoilValue(colorState);
   const currentTool = useRecoilValue(toolState);
 
@@ -100,36 +101,86 @@ const TodoItem = ({ todo }: {
       setIsActiveDelete(false);
     }
   }, [currentTool])
+
+  useEffect(() => {
+    if(textareaElement.current) {
+      textareaElement.current.style.height = 'auto';
+      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
+    }
+  }, [textareaElement])
   return (
     <div 
-      className={`relative w-full min-h-[50px] shadow flex flex-row items-center p-2 overflow-hidden ${isEditMode ? 'translate-y-[-30px] scale-[105%] shadow-[0px_30px_30px_-10px_rgba(0,0,0,0.2)]' : 'shadow'} duration-300 bg-white ${isDelete && 'animate-slide-right'}`}
+      className={`relative w-full min-h-[50px] duration-300 ${isDelete && 'animate-slide-right'} p-2 overflow-hidden px-3 py-1`}
       onTouchStart={handleSwipe}
       onTouchEnd={handleSwipe}
       onMouseDown={handleSwipe}
       onMouseLeave={handleSwipe}
       onMouseUp={handleSwipe}
     >
-      <div className='h-full flex items-center justify-center pr-2'>
-        <input 
-          className='w-5 h-5'
-          type="checkbox" 
-          name="done"
-          checked={checked}
-          onChange={handleCheck}
-        />
-      </div>
-      <div 
-        className='w-full flex flex-row'
+      <div
+        className='w-full bg-white rounded'
       >
-        <p 
-          className={`${checked && 'line-through text-gray-400'} break-words w-11/12 text-start ${color} rounded px-2`}
-          onClick={handleChangeColor}
-        >
-          {text}
-        </p>
+        <div className={`relative w-full flex flex-row items-center shadow-md ${color} p-2 rounded`}>
+          <div
+            className={` flex flex-col items-center p-1 rounded w-full`}
+            onClick={handleChangeColor}
+          >
+            {
+              title && 
+              <div className='w-full mb-2 px-1'>
+                <h3
+                  className={`text-md font-bold text-start ${checked && 'line-through text-gray-400'}`}
+                >
+                  {title}
+                </h3>
+              </div>
+            }
+            <div className='w-full flex flex-row items-center'>
+              <div 
+                className='w-full flex flex-row relative'
+              >
+                <textarea
+                  ref={textareaElement}
+                  className={`${checked && 'line-through text-gray-400'} text-black break-words w-11/12 text-start rounded px-2 py-1 border-none bg-transparent resize-none`}
+                  value={text}
+                  readOnly
+                  draggable={true}
+                />
+                <div className='absolute top-0 left-0 w-11/12 h-full'></div>
+              </div>
+            </div>
+            <div className='w-full text-start flex flex-row justify-between'>
+              <span
+                className='text-xs text-gray-600 text-start w-full px-2'
+              >
+                {date}
+              </span>
+              <span
+                className='text-[10px] text-gray-400 text-start px-2'
+              >
+                {type.toUpperCase()}
+              </span>
+            </div>
+          </div>
+          <div className='absolute top-[50%] right-5 translate-x-[50%] translate-y-[-50%] h-full flex items-center justify-center pr-2 h-fit'>
+            <label 
+              htmlFor={`done_${id}`}
+              className={`w-6 h-6 flex items-center justify-center rounded-lg border-2 after:text-gray-400 ${checked ? `after:content-["✔"] text-gray-400 border-gray-300` : 'border-gray-500'}`}
+            >
+              <input 
+                id={`done_${id}`}
+                className='w-5 h-5 hidden'
+                type="checkbox" 
+                name="done"
+                checked={checked}
+                onChange={handleCheck}
+              />
+            </label>
+          </div>
+        </div>
       </div>
       <div 
-        className={`absolute top-0 right-0 w-[50px] h-full flex items-center justify-center ${isActiveDelete ? 'translate-x-0' : 'translate-x-[50px]'} duration-300`}
+        className={`absolute top-1 right-0 w-[50px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-0' : 'translate-x-[55px]'} duration-300`}
       >
         <button
           className='w-[50px] h-full rounded-tl rounded-bl bg-red-500 text-white shadow text-sm'

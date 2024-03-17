@@ -28,6 +28,7 @@ const TodoInputBox = () => {
   const handleSubmit = async () => {
     if(!value) return;
     const input = {
+      title: undefined,
       text: value,
       checked: false,
       color: undefined,

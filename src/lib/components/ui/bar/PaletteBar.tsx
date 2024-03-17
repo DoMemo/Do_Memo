@@ -22,7 +22,7 @@ const PaletteBar = () => {
   }
   return (
     <div
-      className={`absolute ${isActive() ? "top-[-100%]" : "top-2"} left-0 flex flex-row gap-3 justify-center items-center w-full h-[50px] pt-2 shadow-[0_-2px_2px_0px_rgba(0,0,0,0.1)] bg-white duration-300`}
+      className={`absolute ${isActive() ? "top-[-110%]" : "top-2"} left-0 flex flex-row gap-3 justify-center items-center w-[calc(100%-16px)] h-[60px] shadow-[0_0px_2px_1px_rgba(0,0,0,0.1)] bg-white duration-300 rounded-full mx-2`}
     >
       {
         colors.map((color, index) => {
