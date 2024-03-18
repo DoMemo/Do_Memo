@@ -17,7 +17,7 @@ const pages = [
 ]
 const SideBarLinks = () => {
   return (
-    <div className='w-full flex flex-col gap-4'>
+    <div className='w-full flex flex-col items-start gap-4 text-xl font-bold uppercase p-4'>
       {pages.map((page, index) => (
         <Link key={index} to={page.link}>
           {page.name}

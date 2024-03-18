@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HamburgerButton from 'lib/components/ui/button/HamburgerButton';
 import Logo from 'lib/components/ui/logo/Logo';
 import SideBar from './SideBar';
-import CancelBackground from 'lib/components/background/CancelBackground';
+import { useLocation } from 'react-router-dom';
 
 const AppBar = () => {
   const [ isSideBarActive, setIsSideBarActive ] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsSideBarActive(false);
+  }, [location]);
 
   return (
-    <div className='w-full h-[50px] flex flex-row justify-between items-center shadow-lg p-2 relative z-50'>
+    <div className='w-full h-[50px] flex flex-row justify-between items-center shadow p-2 relative z-50'>
       <h1 className='sr-only'>Do!</h1>
       <Logo />
       <div className='absolute top-[15px] right-[10px] z-50'>
