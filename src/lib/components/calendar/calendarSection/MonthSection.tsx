@@ -13,7 +13,7 @@ const MonthSection = ({ dayArray, currentMonth }: { dayArray: string[]; currentM
     <div>
       <div className="flex">
         {days.map((day) => (
-          <div className="w-[100 / 7]">
+          <div className="w-[calc(100%/7)]">
             <div className="font-bold">{day}</div>
           </div>
         ))}
