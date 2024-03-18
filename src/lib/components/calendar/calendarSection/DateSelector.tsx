@@ -122,4 +122,6 @@ const DateSelector = () => {
   );
 };
 
+function getDaysInPrevMonth(currentDate: Date, year: number, month: number) {}
+
 export default DateSelector;
