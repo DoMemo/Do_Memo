@@ -7,13 +7,12 @@ const MonthSection = ({ dayArray, currentMonth }: { dayArray: string[]; currentM
   useEffect(() => {
     setDays(['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']);
   }, []);
-  console.log(currentMonth);
 
   return (
     <div>
       <div className="flex">
         {days.map((day) => (
-          <div className="w-[100 / 7]">
+          <div className="w-[calc(100%/7)]">
             <div className="font-bold">{day}</div>
           </div>
         ))}
