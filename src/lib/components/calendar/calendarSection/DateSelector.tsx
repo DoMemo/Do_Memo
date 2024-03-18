@@ -64,9 +64,9 @@ const DateSelector = () => {
         </div>
         <div>
           <button className="mr-2" onClick={handlePrevMonth}>
-            이전달
+            이전
           </button>
-          <button onClick={handleNextMonth}>다음달</button>
+          <button onClick={handleNextMonth}>다음</button>
         </div>
       </div>
       <MonthSection dayArray={monthDaysArray} currentMonth={month + 1} />
