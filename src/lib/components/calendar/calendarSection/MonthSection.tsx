@@ -7,7 +7,6 @@ const MonthSection = ({ dayArray, currentMonth }: { dayArray: string[]; currentM
   useEffect(() => {
     setDays(['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']);
   }, []);
-  console.log(currentMonth);
 
   return (
     <div>
