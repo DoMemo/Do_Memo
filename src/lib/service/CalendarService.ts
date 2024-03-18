@@ -13,7 +13,8 @@ export class CalendarService {
         if (result) {
           const getSchedule = await this.getSchedule(result);
 
-          const orderList = this.getScheduleOrder();
+          // dnd 추가시 적용
+          // const orderList = this.getScheduleOrder();
           // orderList.push(result);
           // this.updateScheduleOrder(orderList);
 
