@@ -6,7 +6,7 @@ const DaySection = ({ day }: { day: string }) => {
   const [date, setDate] = useState<string>(day);
   useEffect(() => {
     setDate(day.slice(-2));
-  }, []);
+  }, [day]);
   return <div className="bg-white border-2">{date}</div>;
 };
 
