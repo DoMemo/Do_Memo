@@ -94,20 +94,22 @@ const DateSelector = () => {
   return (
     <div className="max-w-[700px] w-3/4 mx-auto">
       <div className="flex justify-between pl-2 pr-2">
-        <select value={year} onChange={handleYear} className="mr-2">
-          {Array.from({ length: 10 }, (_, index) => year - 5 + index).map((selectYear) => (
-            <option key={selectYear} value={selectYear}>
-              {selectYear}
-            </option>
-          ))}
-        </select>
-        <select value={month} onChange={handleMonth} className="mr-2">
-          {Array.from({ length: 12 }, (_, index) => index).map((selectMonth) => (
-            <option key={selectMonth} value={selectMonth}>
-              {String(selectMonth + 1).padStart(2, '0')}
-            </option>
-          ))}
-        </select>
+        <div>
+          <select value={year} onChange={handleYear} className="mr-2">
+            {Array.from({ length: 10 }, (_, index) => year - 5 + index).map((selectYear) => (
+              <option key={selectYear} value={selectYear}>
+                {selectYear}
+              </option>
+            ))}
+          </select>
+          <select value={month} onChange={handleMonth} className="mr-2">
+            {Array.from({ length: 12 }, (_, index) => index).map((selectMonth) => (
+              <option key={selectMonth} value={selectMonth}>
+                {String(selectMonth + 1).padStart(2, '0')}
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <button className="mr-2" onClick={handlePrevMonth}>
             이전달
@@ -115,7 +117,7 @@ const DateSelector = () => {
           <button onClick={handleNextMonth}>다음달</button>
         </div>
       </div>
-      <MonthSection dayArray={monthDaysArray} />
+      <MonthSection dayArray={monthDaysArray} currentMonth={month + 1} />
     </div>
   );
 };
