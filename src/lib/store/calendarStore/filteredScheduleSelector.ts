@@ -9,6 +9,7 @@ export const filteredScheduleSelector = selector({
     const schedule = get(scheduleState);
     const currentDate = get(currentDateState);
   
+    
     return schedule
   }
 })

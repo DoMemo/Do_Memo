@@ -73,6 +73,7 @@ const TodoItem = ({ todo }: {
   }
   const handleChangeColor = async () => {
     if(currentTool !== Tools.HIGHLIGHTER) return;
+
     const isSameColor = color === currentColor.pickedColor;
 
     await TodoService.updateTodo({
@@ -80,20 +81,10 @@ const TodoItem = ({ todo }: {
       color: isSameColor ? undefined : currentColor.pickedColor
     });
 
-    setTodoList((oldList) => {
-      return [
-        ...oldList.map((todo) => {
-          if(todo.id === id) {
-            return {
-              ...todo,
-              color: isSameColor ? undefined : currentColor.pickedColor
-            }
-          }
-          return todo;
-        })
-      ]
-    });
+    const newList = await TodoService.getTodoList() as Todo[];
+    setTodoList([...newList]);
   }
+  
   useEffect(() => {
     if(currentTool === Tools.ERASER) {
       setIsActiveDelete(true);
