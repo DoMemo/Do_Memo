@@ -10,7 +10,7 @@ const SettingWrapper = () => {
         준비중
       </SettingItem>
       <SettingItem title='다크 모드'>
-        준비중
+        준비중ㅋ
       </SettingItem>
     </div>
   )
