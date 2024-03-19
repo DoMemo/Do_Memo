@@ -10,6 +10,7 @@ import { Todo } from 'lib/types/todo'
 import detectSwipe from 'lib/util/detectSwipe';
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
+import CancelBackground from '../background/CancelBackground';
 
 const TodoItem = ({ todo }: {
   todo: Todo;
@@ -19,11 +20,12 @@ const TodoItem = ({ todo }: {
   const [ todoList, setTodoList ] = useRecoilState(todoState);
   const [ todoOrder, setTodoOrder ] = useRecoilState(todoOrderState);
   const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
+  const [ textValue, setTextValue ] = useState(text);
   const [ offset, setOffset ] = useState(null);
   const [ isActiveDelete, setIsActiveDelete ] = useState(false);
   const textareaElement = useRef<HTMLTextAreaElement>(null);
   const currentColor = useRecoilValue(colorState);
-  const currentTool = useRecoilValue(toolState);
+  const [ currentTool, setCurrentTool ] = useRecoilState(toolState);
   const isDarkMode = useRecoilValue(darkState);
 
   const handleSwipe = (event: any) => {
@@ -53,6 +55,13 @@ const TodoItem = ({ todo }: {
     } catch (error) {
       alert('삭제에 실패했습니다.');
     }
+  }
+  const handlEdit = () => {
+    setIsActiveDelete(false);
+    setIsEditMode(true);
+    setCurrentTool(Tools.NONE);
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.focus();
   }
   const handleCheck = async () => {
     const result = await TodoService.updateTodo({
@@ -86,7 +95,43 @@ const TodoItem = ({ todo }: {
     const newList = await TodoService.getTodoList() as Todo[];
     setTodoList([...newList]);
   }
-  
+  const handleChangeText = (event: React.ChangeEvent<HTMLTextAreaElement> ) => {
+    setTextValue(event.target.value);
+    resizeTextarea();
+  }
+  const submit = async () => {
+    const input = {
+      ...todo,
+      text: textValue,
+    }
+    const result = await TodoService.updateTodo(input);
+    
+    if(!result) return;
+    const newList = await TodoService.getTodoList() as Todo[];
+    
+    if(!newList) return;
+    setTodoList(newList);
+    setIsEditMode(false);
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.blur();
+  }
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if(event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      submit();
+      resizeTextarea();
+    }
+  }
+  const handleCancel = () => {
+    setIsEditMode(false);
+    submit();
+  }
+  const resizeTextarea = () => {
+    if(textareaElement.current) {
+      textareaElement.current.style.height = 'auto';
+      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
+    }
+  }
   useEffect(() => {
     if(currentTool === Tools.ERASER) {
       setIsActiveDelete(true);
@@ -96,14 +141,18 @@ const TodoItem = ({ todo }: {
   }, [currentTool])
 
   useEffect(() => {
-    if(textareaElement.current) {
-      textareaElement.current.style.height = 'auto';
-      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
-    }
+    resizeTextarea();
   }, [textareaElement])
   return (
+    <>
+    {
+      isEditMode && 
+      <CancelBackground 
+        handleCancel={handleCancel}
+      />
+    }
     <div 
-      className={`relative w-full min-h-[50px] duration-300 ${isDelete && 'animate-slide-right'} p-2 overflow-hidden px-3 py-1`}
+      className={`relative w-full min-h-[50px] duration-300 ${isDelete && 'animate-slide-right'} p-2 overflow-hidden px-3 py-1 ${isEditMode ? "z-40 scale-110" : "z-10"}`}
       onTouchStart={handleSwipe}
       onTouchEnd={handleSwipe}
       onMouseDown={handleSwipe}
@@ -135,11 +184,13 @@ const TodoItem = ({ todo }: {
                 <textarea
                   ref={textareaElement}
                   className={`${checked && 'line-through text-gray-400'} text-black break-words w-11/12 text-start rounded px-2 py-1 border-none bg-transparent resize-none`}
-                  value={text}
-                  readOnly
-                  draggable={true}
-                />
-                <div className='absolute top-0 left-0 w-11/12 h-full'></div>
+                  onChange={(event) => handleChangeText(event)}
+                  onKeyDown={(event) => handleKeyDown(event)}
+                >{textValue}</textarea>
+                {
+                  !isEditMode &&
+                  <div className='absolute top-0 left-0 w-11/12 h-full'></div>
+                }
               </div>
             </div>
             <div className='w-full text-start flex flex-row justify-between'>
@@ -173,16 +224,23 @@ const TodoItem = ({ todo }: {
         </div>
       </div>
       <div 
-        className={`absolute top-1 right-0 w-[50px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-0' : 'translate-x-[55px]'} duration-300`}
+        className={`absolute top-1 right-0 w-[120px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-0' : 'translate-x-[130px]'} duration-300`}
       >
         <button
-          className='w-[50px] h-full rounded-tl rounded-bl bg-red-500 text-white shadow text-sm'
+          className='w-[60px] h-full rounded-tl rounded-bl bg-blue-600 text-white shadow text-sm'
+          onClick={handlEdit}
+        >
+          edit
+        </button>
+        <button
+          className='w-[50px] h-full bg-red-600 text-white shadow text-sm'
           onClick={handleDelete}
         >
           delete
         </button>
       </div>
     </div>
+    </>
   )
 }
 
