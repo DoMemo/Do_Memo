@@ -8,7 +8,7 @@ import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import { todoState } from 'lib/store/todoStore/todoState';
 import { Todo } from 'lib/types/todo'
 import detectSwipe from 'lib/util/detectSwipe';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import CancelBackground from '../background/CancelBackground';
 
@@ -24,6 +24,7 @@ const TodoItem = ({ todo }: {
   const [ offset, setOffset ] = useState(null);
   const [ isActiveDelete, setIsActiveDelete ] = useState(false);
   const textareaElement = useRef<HTMLTextAreaElement>(null);
+  const sideButtonElement = useRef<HTMLDivElement>(null);
   const currentColor = useRecoilValue(colorState);
   const [ currentTool, setCurrentTool ] = useRecoilState(toolState);
   const isDarkMode = useRecoilValue(darkState);
@@ -233,6 +234,7 @@ const TodoItem = ({ todo }: {
       </div>
       <div 
         className={`absolute top-1 right-0 w-[120px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-0' : 'translate-x-[130px]'} duration-300`}
+        ref={sideButtonElement}
       >
         <button
           className='w-[60px] h-full rounded-tl rounded-bl bg-blue-600 text-white shadow text-sm'
