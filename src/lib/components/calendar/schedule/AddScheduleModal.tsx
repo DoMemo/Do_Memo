@@ -18,17 +18,16 @@ const AddScheduleModal = () => {
     return activeTool === Tools.PEN;
   };
 
-  const handleScheduleTitle = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleScheduleTitle = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
   };
 
-  const handleScheduleContent = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleScheduleContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value);
   };
 
   const addSchedule = async () => {
     const newSchedule: CreateSchedule = {
-      id: '',
       title: title,
       text: content,
       color: undefined,
@@ -56,10 +55,10 @@ const AddScheduleModal = () => {
             <h2>일정 추가</h2>
           </div>
           <div>
-            <input type="text" value={title} onChange={handleScheduleTitle} />
+            <textarea value={title} onChange={handleScheduleTitle} />
           </div>
           <div>
-            <input type="text" value={content} onChange={handleScheduleContent} />
+            <textarea value={content} onChange={handleScheduleContent} />
           </div>
           <button onClick={addSchedule}>일정 추가!</button>
         </div>
