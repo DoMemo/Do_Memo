@@ -23,6 +23,9 @@ export const initIndexedDB = async () => {
       if (oldVersion < 1) {
         db.createObjectStore(INDEXED_DB.TODO_LIST, { keyPath: 'id', autoIncrement: true });
         db.createObjectStore(INDEXED_DB.HISTORY_LIST, { keyPath: 'id', autoIncrement: true });
+      }
+
+      if (oldVersion < 2) {
         db.createObjectStore(INDEXED_DB.CALENDAR_TODO, { keyPath: 'id', autoIncrement: true });
       }
     };

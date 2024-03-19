@@ -3,6 +3,6 @@ export enum INDEXED_DB {
   TODO_LIST = 'todo_list',
   TODO_LIST_INDEX = 'todo_list_index',
   HISTORY_LIST = 'history_list',
-  VERSION = 1,
   CALENDAR_TODO = 'todo_calendar',
+  VERSION = 2,
 }
