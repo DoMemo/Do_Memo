@@ -83,9 +83,9 @@ const TodoInputBox = () => {
           <CancelBackground 
             handleCancel={handleCancel}
           />
-          <div className='absolute top-0 left-0 w-full h-[56px] overflow-hidden z-40 flex justify-center pt-2'>
+          <div className='absolute top-0 left-0 w-full overflow-hidden z-40 flex justify-center pt-2'>
             <div
-              className={`w-[calc(100%-10px)] h-[48px] bg-white rounded-full flex flex-row justify-between items-center gap-2 p-1 shadow-inner-[0px_0px_10px_-2px_rgba(0,0,0,0.3)] ${isActive() ? 'animate-slide-down' : ' animate-slide-up'} z-40 shadow`}
+              className={`relative w-[calc(100%-10px)] flex flex-row justify-between items-center gap-2 p-1 bg-white rounded ${isActive() ? 'animate-slide-down' : ' animate-slide-up'} z-40 shadow`}
             >
               <CommonInput 
                 value={value}

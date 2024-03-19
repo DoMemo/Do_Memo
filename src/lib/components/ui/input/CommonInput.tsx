@@ -7,32 +7,60 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   isFocus?: boolean;
   handleSubmit?: () => void;
 }) => {
-  const inputElement = useRef<HTMLInputElement>(null);
+  const textareaElement = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if(e.key === 'Enter' && handleSubmit) {
+  
+  const textareaResize = (init?: string) => {
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.style.height = 'auto';
+    
+    if(init === 'init') {
+      textareaElement.current.style.height = '40px';
+      return;
+    }
+    textareaElement.current.style.height = textareaElement.current?.scrollHeight + 'px';
+  };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if(e.key === 'Enter' && handleSubmit && !e.shiftKey) {
+      textareaResize('init');
       handleSubmit();
     }
-  }
+  };
 
+  const handleValue = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    textareaResize();
+    setValue(event.target.value);
+  };
+
+  const initSize = () => {
+    if(!value) {
+      textareaResize('init');
+    }
+  }
   useEffect(() => {
     if(isFocus) {
       setTimeout(() => {
-        inputElement.current?.focus();
+        textareaElement.current?.focus();
       }, 310);
     };
 
   }, [isFocus]);
 
+  useEffect(() => {
+    textareaResize('init');
+  }, []);
+
   return (
-    <input 
-      className={`w-full h-full text-black rounded-full px-4 focus:outline-none focus:border-none ${isShadow && 'shadow'}`}
-      type="text"
+    <textarea 
+      className={` w-10/12 h-full text-black rounded-xl px-4 bg-white focus:outline-none focus:border-none p-2 ${isShadow && 'shadow'}`}
       autoFocus={true}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
-      ref={inputElement}
-      onKeyPress={handleKeyDown}
+      onChange={(event) => handleValue(event)}
+      ref={textareaElement}
+      onKeyDown={handleKeyDown}
+      onKeyUp={initSize}
     />
   )
 }
