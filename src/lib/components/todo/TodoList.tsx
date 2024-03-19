@@ -49,7 +49,7 @@ const TodoList = ({ scroll }: {
       list={todoList}
     >
       <div
-        className={`w-full h-full flex flex-col items-center justify-start gap-1 todolist pt-2`}
+        className={`w-full h-full flex flex-col items-center justify-start gap-1 todolist`}
       >
         <Droppable
           droppableId="droppable"

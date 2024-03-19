@@ -85,7 +85,7 @@ const TodoInputBox = () => {
           />
           <div className='absolute top-0 left-0 w-full overflow-hidden z-40 flex justify-center pt-2'>
             <div
-              className={`relative w-[calc(100%-10px)] flex flex-row justify-between items-center gap-2 p-1 bg-white rounded ${isActive() ? 'animate-slide-down' : ' animate-slide-up'} z-40 shadow`}
+              className={`relative w-[calc(100%-10px)] flex flex-row justify-between items-center gap-2 p-1 bg-white rounded ${isActive() ? 'animate-slide-down' : ' animate-slide-up'} z-40`}
             >
               <CommonInput 
                 value={value}

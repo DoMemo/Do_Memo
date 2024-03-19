@@ -11,6 +11,7 @@ import detectSwipe from 'lib/util/detectSwipe';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import CancelBackground from '../background/CancelBackground';
+import { FontSizeState } from 'lib/store/setting/FontState';
 
 const TodoItem = ({ todo }: {
   todo: Todo;
@@ -27,10 +28,12 @@ const TodoItem = ({ todo }: {
   const sideButtonElement = useRef<HTMLDivElement>(null);
   const currentColor = useRecoilValue(colorState);
   const [ currentTool, setCurrentTool ] = useRecoilState(toolState);
+  const fontSize = useRecoilValue(FontSizeState);
   const isDarkMode = useRecoilValue(darkState);
 
   const handleSwipe = (event: any) => {
     const swipeType = detectSwipe(event, offset, setOffset);
+    console.log(swipeType);
     if(swipeType === 'left') {
       setIsActiveDelete(true);
     } else if(swipeType === 'right') {
@@ -151,6 +154,11 @@ const TodoItem = ({ todo }: {
   useEffect(() => {
     resizeTextarea();
   }, [textareaElement])
+  useEffect(() => {
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.style.fontSize = (fontSize + 'px');
+    resizeTextarea();
+  }, [fontSize]);
   return (
     <>
     {
@@ -195,7 +203,8 @@ const TodoItem = ({ todo }: {
                   onChange={(event) => handleChangeText(event)}
                   onKeyPress={(event) => handleKeyDown(event)}
                   onBlur={submit}
-                >{textValue}</textarea>
+                  value={textValue}
+                />
                 {
                   !isEditMode &&
                   <div className='absolute top-0 left-0 w-11/12 h-full'></div>
@@ -233,17 +242,17 @@ const TodoItem = ({ todo }: {
         </div>
       </div>
       <div 
-        className={`absolute top-1 right-0 w-[120px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-0' : 'translate-x-[130px]'} duration-300`}
+        className={`absolute top-1 right-0 w-[140px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-[10px]' : 'translate-x-[150px]'} duration-300`}
         ref={sideButtonElement}
       >
         <button
-          className='w-[60px] h-full rounded-tl rounded-bl bg-blue-600 text-white shadow text-sm'
+          className='w-[60px] h-full bg-violet-400 text-white shadow text-sm font-bold'
           onClick={handlEdit}
         >
           edit
         </button>
         <button
-          className='w-[50px] h-full bg-red-600 text-white shadow text-sm'
+          className='w-[60px] h-full bg-red-500 text-white shadow text-sm font-bold'
           onClick={handleDelete}
         >
           delete

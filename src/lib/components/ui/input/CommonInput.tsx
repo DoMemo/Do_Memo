@@ -1,4 +1,6 @@
+import { FontSizeState } from 'lib/store/setting/FontState';
 import React, { useEffect, useRef, useState } from 'react'
+import { useRecoilValue } from 'recoil';
 
 const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   value: string;
@@ -8,6 +10,7 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   handleSubmit?: () => void;
 }) => {
   const textareaElement = useRef<HTMLTextAreaElement | null>(null);
+  const fontSize = useRecoilValue(FontSizeState);
 
   
   const textareaResize = (init?: string) => {
@@ -45,9 +48,14 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
     textareaResize('init');
   }, []);
 
+  useEffect(() => {
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.style.fontSize = (fontSize + 'px');
+  }, [fontSize]);
+
   return (
     <textarea 
-      className={` w-10/12 h-full text-black resize-none rounded-xl px-4 bg-white scrollbar-hide focus:outline-none focus:border-none p-2 ${isShadow && 'shadow'}`}
+      className={` w-10/12 h-full text-black resize-none rounded-xl px-4 bg-white scrollbar-hide ${`text-[${fontSize}px]`} focus:outline-none focus:border-none p-2 ${isShadow && 'shadow'}`}
       onChange={(event) => handleValue(event)}
       value={value}
       ref={textareaElement}
