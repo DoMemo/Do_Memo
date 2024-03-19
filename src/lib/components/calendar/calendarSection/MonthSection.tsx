@@ -11,8 +11,8 @@ const MonthSection = ({ dayArray, currentMonth }: { dayArray: string[]; currentM
   return (
     <div>
       <div className="flex">
-        {days.map((day) => (
-          <div className="w-[calc(100%/7)]">
+        {days.map((day, index) => (
+          <div className="w-[calc(100%/7)]" key={index}>
             <div className="font-bold">{day}</div>
           </div>
         ))}

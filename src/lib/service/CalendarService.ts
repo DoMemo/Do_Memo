@@ -12,11 +12,6 @@ export class CalendarService {
         const result = request.result;
         if (result) {
           const getSchedule = await this.getSchedule(result);
-
-          // const orderList = this.getScheduleOrder();
-          // orderList.push(result);
-          // this.updateScheduleOrder(orderList);
-
           resolve(getSchedule);
         }
       };
