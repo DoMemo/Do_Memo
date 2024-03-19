@@ -10,7 +10,7 @@ const CommonSubmitButton = ({ handleClick, isShadow }: {
   }
   return (
     <button
-      className={`w-[50px] h-[40px] bg-black text-white rounded-md border-0 text-sm ${isShadow && 'shadow'}`}
+      className={`w-[50px] h-[40px] bg-black text-white rounded-full border-0 text-sm ${isShadow && 'shadow'}`}
       type='submit'
       onClick={handleSubmit}
     >

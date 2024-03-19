@@ -3,6 +3,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 const pages = [
   {
+    name: 'home',
+    link: PageInfo.home,
+  },
+  {
     name: 'calendar',
     link: PageInfo.calendar,
   }, 
@@ -10,10 +14,6 @@ const pages = [
   //   name: 'note',
   //   link: PageInfo.note,
   // },
-  {
-    name: 'home',
-    link: PageInfo.home,
-  },
 ]
 const SideBarLinks = () => {
   return (

@@ -26,7 +26,7 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
 
   return (
     <input 
-      className={`w-full h-[40px] bg-white border-2 border-gray-300 rounded-md px-4 focus:outline-none focus:border-blue-500 ${isShadow && 'shadow'}`}
+      className={`w-full h-full text-black rounded-full px-4 focus:outline-none focus:border-none ${isShadow && 'shadow'}`}
       type="text"
       autoFocus={true}
       value={value}
