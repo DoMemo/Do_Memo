@@ -1,15 +1,16 @@
 import React from 'react';
-import CircleButton from 'lib/components/ui/button/CircleButton';
-import SettingImg from 'assets/images/setting.png'
 import ToolBox from 'lib/components/tool/ToolBox';
 import { Tools } from 'lib/enum/Tools';
 import SettingBar from './SettingBar';
 import { toolState } from 'lib/store/ToolState';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import PaletteBar from './PaletteBar';
+import { darkState } from 'lib/store/setting/DarkState';
+import SettingButton from 'lib/components/ui/button/SettingButton';
 
 const ControlBar = () => {
   const [ currentTool, setCurrentTool ] = useRecoilState(toolState);
+  const isDarkMode = useRecoilValue(darkState);
 
   const toggleSettingBar = () => {
     if(currentTool === Tools.SETTING) {
@@ -19,18 +20,18 @@ const ControlBar = () => {
     }
   }
   return (
-    <div className='relative flex flex-row justify-between items-center w-full h-[68px]  z-40'>
+    <div className={`relative ${isDarkMode ? "bg-slate-950 text-white" : "bg-white"} flex flex-row justify-between items-center w-full h-[68px]  z-40`}>
       <PaletteBar />
       <div className='w-full h-full flex flex-row justify-center items-center'>
         <ToolBox />
       </div>
       <SettingBar />
-      <div className='w-[48px] h-full flex items-center px-1 absolute top-0 right-1'>
-        <button className={`w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center duration-300 ${currentTool === Tools.SETTING && 'rotate-180'}`} 
+      <div className='w-[48px] h-full flex items-center px-1 absolute top-0 right-0'
+        onClick={toggleSettingBar}
+      >
+        <SettingButton
           onClick={toggleSettingBar}
-        >
-          <img src={SettingImg} alt="tool" />
-        </button>
+        />
       </div>
     </div>
   )

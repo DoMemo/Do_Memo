@@ -25,9 +25,15 @@ const ColorPicker = ({ color }: {
 
   return (
     <div
-      className={`w-[45px] h-[45px] rounded-full ${color} cursor-pointer ${isActive ? `scale-110 border-2 border-${color}` : ""} transition-transform duration-300 ease-in-out`}
+      className={`w-[45px] h-[45px] rounded-full bg-white cursor-pointer ${isActive ? `scale-[120%] ` : "scale-[80%]"} transition-transform duration-300 ease-[cubic-bezier(0.4, 0, 0.5, 1.74)]`}
       onClick={handleColorPicker}
-    />
+    >
+      <div
+        className={`w-full h-full rounded-full ${color}`}
+      >
+
+      </div>
+    </div>
   )
 }
 

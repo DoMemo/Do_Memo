@@ -1,8 +1,9 @@
 import { Tools } from 'lib/enum/Tools';
 import { toolState } from 'lib/store/ToolState';
 import React, { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import SideBarLinks from './SideBarLinks';
+import { darkState } from 'lib/store/setting/DarkState';
 
 const SideBar = ({direction, isActive}: {
   direction: string;
@@ -11,6 +12,7 @@ const SideBar = ({direction, isActive}: {
   // 1. set State
   const [ mounted, setMounted ] = useState(false);
   const [ currentTool, setCurrentTool ] = useRecoilState(toolState);
+  const isDarkMode = useRecoilValue(darkState);
   
   // 2. 선언형 함수들
   // 예시로 렌더에 영향을 주거나 state를 변경하는 함수들 또는 Service이용하는 함수
@@ -23,7 +25,7 @@ const SideBar = ({direction, isActive}: {
     } else {
       setTimeout(() => {
         setMounted(false);
-      }, 250);
+      }, 180);
     }
   }, [isActive] );
   
@@ -32,7 +34,7 @@ const SideBar = ({direction, isActive}: {
     <>
       {
         mounted && 
-          <div className={`w-10/12 h-screen bg-white shadow-lg absolute top-0 ${returnPathStyle(direction)} ${isActive ? "animate-slide-left" : "animate-slide-right"} z-40`}>
+          <div className={`w-8/12 h-screen ${isDarkMode ? "bg-slate-900" :"bg-white"} shadow-lg absolute top-0 ${returnPathStyle(direction)} ${isActive ? "animate-slide-left" : "animate-slide-right"} z-40`}>
             <div className='w-full h-[60px]'></div>
             <SideBarLinks />
           </div>

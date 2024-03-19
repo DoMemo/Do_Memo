@@ -20,10 +20,10 @@ const CircleButton = ({ img, name, isShadow, onClickFn }: {
   }, [activeTool, name]);
 
   return (
-    <button className={`w-[50px] h-[50px] bg-white rounded-full flex justify-center items-center duration-200 ${isShadow && 'shadow-[0_-3px_3px_0px_rgba(0,0,0,0.1)]'} ${isActive && 'translate-y-[-20px]'}`} 
+    <button className={`w-[50px] h-[50px] bg-inherit rounded-full flex justify-center items-center duration-200 ${isShadow && 'shadow-[0_-3px_3px_0px_rgba(0,0,0,0.1)]'} ${isActive && 'translate-y-[-20px]'}`} 
       onClick={onClickFn}
     >
-      <img src={img} alt="tool" />
+      <img src={img} alt="tool" className='w-[25px] h-[25px] cover'/>
     </button>
   )
 }
