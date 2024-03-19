@@ -1,12 +1,19 @@
 import AppBar from 'lib/components/ui/bar/AppBar'
 import ControlBar from 'lib/components/ui/bar/ControlBar'
+import { SettingService } from 'lib/service/SettingService'
 import { darkState } from 'lib/store/setting/DarkState'
-import React from 'react'
+import { FontSizeState } from 'lib/store/setting/FontState'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 const MainLayout = () => {
   const isDarkMode = useRecoilValue(darkState);
+  const [ fontSize, setFontSize ] = useRecoilState(FontSizeState);
+
+  useEffect(() => {
+    setFontSize(SettingService.getFontSize());
+  }, [])
   return (
     <div className={`flex flex-col justify-between w-full h-screen relative ${isDarkMode ? "bg-slate-950 text-white" : "bg-white"}`}>
       <AppBar />

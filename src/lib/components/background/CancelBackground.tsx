@@ -8,7 +8,7 @@ const CancelBackground = ({ handleCancel }: {
   const isDarkMode = useRecoilValue(darkState);
   return (
     <div
-      className={`w-full h-full ${isDarkMode ? "bg-slate-900" : "bg-gray-200"} bg-opacity-30 absolute top-0 left-0 z-30 duration-200`}
+      className={`w-full h-[300vh] ${isDarkMode ? "bg-slate-900" : "bg-gray-200"} bg-opacity-30 absolute top-0 left-0 z-30 duration-200`}
       onClick={handleCancel}
     >
 

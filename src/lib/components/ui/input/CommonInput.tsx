@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import { FontSizeState } from 'lib/store/setting/FontState';
+import React, { useEffect, useRef, useState } from 'react'
+import { useRecoilValue } from 'recoil';
 
 const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   value: string;
@@ -7,31 +9,56 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   isFocus?: boolean;
   handleSubmit?: () => void;
 }) => {
-  const inputElement = useRef<HTMLInputElement>(null);
+  const textareaElement = useRef<HTMLTextAreaElement | null>(null);
+  const fontSize = useRecoilValue(FontSizeState);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if(e.key === 'Enter' && handleSubmit) {
-      handleSubmit();
+  
+  const textareaResize = (init?: string) => {
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.style.height = 'auto';
+    
+    if(init === 'init') {
+      textareaElement.current.style.height = '40px';
+      return;
     }
-  }
+    textareaElement.current.style.height = textareaElement.current?.scrollHeight - 20 + 'px';
+  };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if(e.key === 'Enter' && handleSubmit && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+      textareaResize('init');
+    }
+  };
 
+  const handleValue = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setValue(event.target.value);
+    textareaResize();
+  };
   useEffect(() => {
     if(isFocus) {
-      setTimeout(() => {
-        inputElement.current?.focus();
-      }, 310);
+        textareaElement.current?.focus();
     };
 
   }, [isFocus]);
 
+  useEffect(() => {
+    textareaResize('init');
+  }, []);
+
+  useEffect(() => {
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.style.fontSize = (fontSize + 'px');
+  }, [fontSize]);
+
   return (
-    <input 
-      className={`w-full h-full text-black rounded-full px-4 focus:outline-none focus:border-none ${isShadow && 'shadow'}`}
-      type="text"
-      autoFocus={true}
+    <textarea 
+      className={` w-10/12 h-full text-black resize-none rounded-xl px-4 bg-white scrollbar-hide ${`text-[${fontSize}px]`} focus:outline-none focus:border-none p-2 ${isShadow && 'shadow'}`}
+      onChange={(event) => handleValue(event)}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
-      ref={inputElement}
+      ref={textareaElement}
       onKeyPress={handleKeyDown}
     />
   )
