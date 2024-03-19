@@ -1,6 +1,10 @@
-import React from 'react'
-import ScheduleCard from './ScheduleCard'
-
+import { CalendarService } from 'lib/service/CalendarService';
+import { scheduleState } from 'lib/store/calendarStore/scheduleState';
+import { Schedule } from 'lib/types/Schedule';
+import React from 'react';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import ScheduleCard from './ScheduleCard';
 
 const DummyData = [
   {
@@ -13,9 +17,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '2',
@@ -27,9 +31,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '3',
@@ -41,9 +45,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '4',
@@ -55,9 +59,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '5',
@@ -69,9 +73,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '6',
@@ -83,9 +87,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '7',
@@ -97,9 +101,9 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
   {
     id: '8',
@@ -111,26 +115,33 @@ const DummyData = [
     link: [
       {
         type: 'type',
-        id: 'id'
-      }
-    ]
+        id: 'id',
+      },
+    ],
   },
-]
+];
 const ScheduleWrapper = () => {
+  const [scheduleList, setScheduleList] = useRecoilState(scheduleState);
+  const getScheduleList = async () => {
+    const result = (await CalendarService.getScheduleList()) as Schedule[];
+    setScheduleList(() => {
+      return [...result];
+    });
+  };
+
+  useEffect(() => {
+    getScheduleList();
+  }, []);
   return (
-    <div
-      className='w-full p-2'
-    >
+    <div className="w-full p-2">
+      {scheduleList.map((schedule) => {
+        return <ScheduleCard key={schedule.id} schedule={schedule} />;
+      })}
       {DummyData.map((schedule) => {
-        return (
-          <ScheduleCard
-            key={schedule.id}
-            schedule={schedule}
-          />
-        )
+        return <ScheduleCard key={schedule.id} schedule={schedule} />;
       })}
     </div>
-  )
-}
+  );
+};
 
-export default ScheduleWrapper
+export default ScheduleWrapper;
