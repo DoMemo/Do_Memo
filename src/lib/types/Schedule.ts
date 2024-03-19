@@ -11,7 +11,6 @@ export interface Schedule {
   }[];
 }
 export interface CreateSchedule {
-  id: string;
   title: string;
   text: string;
   color: string | undefined;

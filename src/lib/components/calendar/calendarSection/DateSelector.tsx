@@ -5,7 +5,7 @@ const DateSelector = () => {
   const [monthDaysArray, setMonthDaysArray] = useState<string[]>([]);
   const currentDate = new Date();
   const [year, setYear] = useState<number>(currentDate.getFullYear());
-  const [month, setMonth] = useState<number>(currentDate.getMonth() - 1);
+  const [month, setMonth] = useState<number>(currentDate.getMonth());
 
   //Year, Month 설정 함수
   const handleYear = (event: React.ChangeEvent<HTMLSelectElement>) => {
