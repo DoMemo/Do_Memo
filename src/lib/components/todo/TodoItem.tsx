@@ -95,6 +95,18 @@ const TodoItem = ({ todo }: {
     const newList = await TodoService.getTodoList() as Todo[];
     setTodoList([...newList]);
   }
+  const resizeTextarea = (init?: string) => {
+    if(init === 'init') {
+      if(textareaElement.current) {
+        textareaElement.current.style.height = 'auto';
+        textareaElement.current.style.height = '40px';
+      }
+    }
+    if(textareaElement.current) {
+      textareaElement.current.style.height = 'auto';
+      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
+    }
+  }
   const handleChangeText = (event: React.ChangeEvent<HTMLTextAreaElement> ) => {
     setTextValue(event.target.value);
     resizeTextarea();
@@ -119,19 +131,14 @@ const TodoItem = ({ todo }: {
     if(event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       submit();
-      resizeTextarea();
+      resizeTextarea('init');
     }
   }
   const handleCancel = () => {
     setIsEditMode(false);
     submit();
   }
-  const resizeTextarea = () => {
-    if(textareaElement.current) {
-      textareaElement.current.style.height = 'auto';
-      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
-    }
-  }
+
   useEffect(() => {
     if(currentTool === Tools.ERASER) {
       setIsActiveDelete(true);
@@ -185,7 +192,8 @@ const TodoItem = ({ todo }: {
                   ref={textareaElement}
                   className={`${checked && 'line-through text-gray-400'} text-black break-words w-11/12 text-start rounded px-2 py-1 border-none bg-transparent resize-none`}
                   onChange={(event) => handleChangeText(event)}
-                  onKeyDown={(event) => handleKeyDown(event)}
+                  onKeyPress={(event) => handleKeyDown(event)}
+                  onBlur={submit}
                 >{textValue}</textarea>
                 {
                   !isEditMode &&

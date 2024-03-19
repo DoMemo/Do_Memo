@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
   value: string;
@@ -18,32 +18,25 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
       textareaElement.current.style.height = '40px';
       return;
     }
-    textareaElement.current.style.height = textareaElement.current?.scrollHeight + 'px';
+    textareaElement.current.style.height = textareaElement.current?.scrollHeight - 20 + 'px';
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if(e.key === 'Enter' && handleSubmit && !e.shiftKey) {
-      textareaResize('init');
+      e.preventDefault();
       handleSubmit();
+      textareaResize('init');
     }
   };
 
   const handleValue = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    textareaResize();
     setValue(event.target.value);
+    textareaResize();
   };
-
-  const initSize = () => {
-    if(!value) {
-      textareaResize('init');
-    }
-  }
   useEffect(() => {
     if(isFocus) {
-      setTimeout(() => {
         textareaElement.current?.focus();
-      }, 310);
     };
 
   }, [isFocus]);
@@ -54,13 +47,11 @@ const CommonInput = ({ value, setValue, isShadow, isFocus, handleSubmit }: {
 
   return (
     <textarea 
-      className={` w-10/12 h-full text-black rounded-xl px-4 bg-white focus:outline-none focus:border-none p-2 ${isShadow && 'shadow'}`}
-      autoFocus={true}
-      value={value}
+      className={` w-10/12 h-full text-black resize-none rounded-xl px-4 bg-white scrollbar-hide focus:outline-none focus:border-none p-2 ${isShadow && 'shadow'}`}
       onChange={(event) => handleValue(event)}
+      value={value}
       ref={textareaElement}
-      onKeyDown={handleKeyDown}
-      onKeyUp={initSize}
+      onKeyPress={handleKeyDown}
     />
   )
 }
