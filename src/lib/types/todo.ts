@@ -14,6 +14,8 @@ export interface Todo {
     type: string;
     id: string | undefined;
   };
+  createAt: string;
+  updateAt: string;
 }
 export interface CreateTodo {
   text: string;
@@ -28,4 +30,6 @@ export interface CreateTodo {
     type: string;
     id: string | undefined;
   };
+  createAt: string;
+  updateAt: string;
 }

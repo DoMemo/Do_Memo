@@ -7,17 +7,24 @@ const History = () => {
   const [ historyList, setHistoryList ] = useState<Todo[]>([]);
   const getHistory = async () => {
     const result = await TodoService.getTodoHistory() as Todo[];
-    setHistoryList(result);
+    const sortList = result.sort((a, b) => {
+      const dateA = new Date(a.updateAt || a.date);
+      const dateB = new Date(a.updateAt || a.date);
+      return (dateA as any)- (dateB as any);
+  })
+    setHistoryList(sortList);
   }
   useEffect(() => {
     getHistory();
   }, [])
   return (
-    <div>
-      {historyList.map((todo, index) => {
-        return <TodoItem todo={todo} isTodo={false} key={index}/>
-      })}
-    </div>
+    <>
+      <div className='w-full h-full overflow-scroll scrollbar-hide'>
+        {historyList.map((todo, index) => {
+          return <TodoItem todo={todo} isTodo={false} key={index}/>
+        })}
+      </div>
+    </>
   )
 }
 

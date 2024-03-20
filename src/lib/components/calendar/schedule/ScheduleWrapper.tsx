@@ -23,7 +23,7 @@ const ScheduleWrapper = () => {
   }, [scheduleList]);
 
   return (
-    <div className="w-full p-2">
+    <div className="w-full p-2 flex flex-col overflow-x-hidden">
       <div>{selectedDate}</div>
       {filteredSchedule.map((schedule) => {
         return <ScheduleCard key={schedule.id} schedule={schedule} />;

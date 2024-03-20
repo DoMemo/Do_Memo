@@ -11,6 +11,8 @@ export interface Schedule {
     type: string;
     id: string | undefined;
   };
+  createAt: string;
+  updateAt: string;
 }
 export interface CreateSchedule {
   title: string | undefined;
@@ -22,4 +24,6 @@ export interface CreateSchedule {
     type: string;
     id: string | undefined;
   };
+  createAt: string;
+  updateAt: string;
 }

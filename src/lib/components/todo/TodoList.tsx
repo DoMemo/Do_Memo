@@ -1,5 +1,5 @@
 import { todoState } from 'lib/store/todoStore/todoState';
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import TodoItem from './TodoItem';
 import { TodoService } from 'lib/service/TodoService';
@@ -11,6 +11,7 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { uncheckedTodoList } from 'lib/store/todoStore/doSelector';
 import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import { INDEXED_DB } from 'lib/enum/Indexed_DB';
+import { returnToday } from 'lib/util/formatDate';
 
 const TodoList = ({ scroll }: {
   scroll: number;
@@ -23,9 +24,26 @@ const TodoList = ({ scroll }: {
   const getTodoList = async () => {
     const result = await TodoService.getTodoList() as Todo[];
     // console.log(result);
+    const doneList: Todo[] = [];
+
+    result.forEach((item) => {
+      const itemUpdateAt = item.updateAt || item.date;
+      if(itemUpdateAt < returnToday() && item.checked) {
+        doneList.push(item);
+      }
+    })
+    let updatedTodoList: Todo[] = [];
+    doneList.forEach( async (item) => {
+      const { id,  ...createTodo } = item; 
+      await TodoService.deleteTodo(item.id, true);
+      createTodo.date = returnToday();
+      await TodoService.createTodoHistory(createTodo);
+    })
+    updatedTodoList = await TodoService.getTodoList() as Todo[];
+    console.log(doneList);
     setTodoList((oldList) => {
       return [
-        ...result
+        ...updatedTodoList
       ]
     });
   }
@@ -38,8 +56,7 @@ const TodoList = ({ scroll }: {
     }
     setTodoOrderList([]);
   }
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     getTodoOrderList();
     getTodoList();
   }, []);
@@ -82,6 +99,7 @@ const TodoList = ({ scroll }: {
                                 <TodoItem 
                                   key={`${index}_${todo.id}`}
                                   todo={todo}
+                                  isTodo={true}
                                 />
                               </Fliper>
                             </div>
@@ -102,6 +120,7 @@ const TodoList = ({ scroll }: {
                 <TodoItem 
                   key={index}
                   todo={todo}
+                  isTodo={true}
                 />
                 </Fliper>
               )

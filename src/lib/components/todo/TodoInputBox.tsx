@@ -42,6 +42,8 @@ const TodoInputBox = () => {
         type: TYPE.todo,
         id: undefined,
       },
+      createAt: returnToday(),
+      updateAt: returnToday(),
     };
     const result = (await TodoService.createTodo(input)) as Todo;
     if (result) {

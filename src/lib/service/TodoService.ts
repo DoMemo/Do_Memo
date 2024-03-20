@@ -72,16 +72,18 @@ export class TodoService {
   static async deleteTodo(id: 
     string | 
     number | 
-    IDBValidKey) {
+    IDBValidKey, isChecked?: boolean) {
     return new Promise( async (resolve, reject) => {
       const store = await deleteObject(INDEXED_DB.TODO_LIST);
 
       const request = store.delete(id);
       request.onsuccess = (event) => {
-        const orderList = this.getTodoOrder();
-        const index = orderList.indexOf(id);
-        orderList.splice(index, 1);
-        this.updateTodoOrder(orderList);
+        if(!isChecked) {
+          const orderList = this.getTodoOrder();
+          const index = orderList.indexOf(id);
+          orderList.splice(index, 1);
+          this.updateTodoOrder(orderList);
+        }
         resolve(request.result);
       };
       request.onerror = () => {
