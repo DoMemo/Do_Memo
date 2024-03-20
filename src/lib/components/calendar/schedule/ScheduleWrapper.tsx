@@ -9,23 +9,23 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import ScheduleCard from './ScheduleCard';
 
 const ScheduleWrapper = () => {
-  const [scheduleList, setScheduleList] = useRecoilState(scheduleState);
   const selectedDate = useRecoilValue(selectedDateState);
+  const [scheduleList, setScheduleList] = useRecoilState(scheduleState);
   const filteredSchedule = useRecoilValue(filteredScheduleSelector);
-  const getScheduleList = async () => {
-    const result = (await CalendarService.getScheduleList()) as Schedule[];
-    setScheduleList(() => {
-      return [...result];
-    });
-  };
 
+  //ScheduleList가 업데이트 될때 마다 페이지 랜더 후 filteredSchedule가져오기
   useEffect(() => {
+    const getScheduleList = async () => {
+      const result = (await CalendarService.getScheduleList()) as Schedule[];
+      setScheduleList(result);
+    };
     getScheduleList();
   }, [scheduleList]);
+
   return (
     <div className="w-full p-2">
       <div>{selectedDate}</div>
-      {scheduleList.map((schedule) => {
+      {filteredSchedule.map((schedule) => {
         return <ScheduleCard key={schedule.id} schedule={schedule} />;
       })}
     </div>

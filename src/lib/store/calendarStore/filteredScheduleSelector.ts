@@ -1,7 +1,5 @@
 import { selector } from 'recoil';
 import { scheduleState } from './scheduleState';
-import { currentDateState } from './currentDateState';
-import { TodoService } from 'lib/service/TodoService';
 import { selectedDateState } from './selectedDateState';
 import { Schedule } from 'lib/types/Schedule';
 

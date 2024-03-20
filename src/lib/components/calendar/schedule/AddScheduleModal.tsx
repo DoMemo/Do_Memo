@@ -1,3 +1,4 @@
+import CancelBackground from 'lib/components/background/CancelBackground';
 import { Tools } from 'lib/enum/Tools';
 import { TYPE } from 'lib/enum/Type';
 import { CalendarService } from 'lib/service/CalendarService';
@@ -33,13 +34,20 @@ const AddScheduleModal = () => {
       color: undefined,
       type: TYPE.schedule,
       date: selectedDate,
-      link: [],
+      link: {
+        type: TYPE.schedule,
+        id: undefined,
+      },
     };
 
     const result = (await CalendarService.createSchedule(newSchedule)) as Schedule;
 
     setTitle('');
     setContent('');
+  };
+
+  const handleModalClose = () => {
+    setActiveTool(Tools.NONE);
   };
 
   useEffect(() => {
@@ -50,18 +58,21 @@ const AddScheduleModal = () => {
   return (
     <div>
       {isShow && (
-        <div className="absolute top-0 left-1/4 p-4 bg-gray-400">
-          <div>
-            <h2>일정 추가</h2>
+        <>
+          <CancelBackground handleCancel={handleModalClose} />
+          <div className="absolute top-0 left-1/4 p-4 bg-gray-400 z-40">
+            <div>
+              <h2>일정 추가</h2>
+            </div>
+            <div>
+              <textarea value={title} onChange={handleScheduleTitle} />
+            </div>
+            <div>
+              <textarea value={content} onChange={handleScheduleContent} />
+            </div>
+            <button onClick={addSchedule}>일정 추가!</button>
           </div>
-          <div>
-            <textarea value={title} onChange={handleScheduleTitle} />
-          </div>
-          <div>
-            <textarea value={content} onChange={handleScheduleContent} />
-          </div>
-          <button onClick={addSchedule}>일정 추가!</button>
-        </div>
+        </>
       )}
     </div>
   );
