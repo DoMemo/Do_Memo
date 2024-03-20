@@ -25,6 +25,9 @@ const AppBar = () => {
           setIsActive={setIsSideBarActive}
         />
       </div>
+      <div>
+
+      </div>
       <SideBar 
         direction='right'
         isActive={isSideBarActive}

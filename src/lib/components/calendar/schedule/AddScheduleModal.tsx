@@ -8,6 +8,7 @@ import { selectedDateState } from 'lib/store/calendarStore/selectedDateState';
 import { darkState } from 'lib/store/setting/DarkState';
 import { toolState } from 'lib/store/ToolState';
 import { CreateSchedule, Schedule } from 'lib/types/Schedule';
+import { returnToday } from 'lib/util/formatDate';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -45,6 +46,8 @@ const AddScheduleModal = () => {
         type: TYPE.schedule,
         id: undefined,
       },
+      createAt: returnToday(),
+      updateAt: returnToday(),
     };
 
     const result = (await CalendarService.createSchedule(newSchedule)) as Schedule;

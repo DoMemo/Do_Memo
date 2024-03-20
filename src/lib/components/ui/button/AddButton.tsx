@@ -14,6 +14,7 @@ import goToDoImgWhite from 'assets/images/goTodo_white.png';
 import goScheduleImg from 'assets/images/goSchedule.png';
 import goScheduleImgWhite from 'assets/images/goSchedule_white.png';
 import { darkState } from 'lib/store/setting/DarkState';
+import { returnToday } from 'lib/util/formatDate';
 
 const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYPE }) => {
   const [todoList, setTodoList] = useRecoilState(todoState);
@@ -55,6 +56,8 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
         type: target.link.type,
         id: undefined,
       },
+      createAt: target.createAt ?? returnToday(),
+      updateAt: returnToday(),
     };
     try {
       const createdTodo = (await TodoService.createTodo(todo)) as Todo;
@@ -82,6 +85,8 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
         type: target.link.type,
         id: undefined,
       },
+      createAt: target.createAt,
+      updateAt: returnToday(),
     };
     try {
       const createSchedule = (await CalendarService.createSchedule(schedule)) as Schedule;

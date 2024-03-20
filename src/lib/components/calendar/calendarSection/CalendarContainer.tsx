@@ -29,12 +29,18 @@ const CalendarContainer = () => {
   }, []);
   return (
     <div
-      className={`relative w-full h-[calc(100vh-110px)] z-10 overflow-scroll scrollbar-hide`}
+      className={`relative w-full h-[calc(100vh-110px)] z-10 overflow-scroll scrollbar-hide 
+        md:flex md:flex-row
+      `}
       ref={bodyContainer}
       onScroll={handleScroll}
     >
-      <DateSelector />
-      <ScheduleWrapper />
+      <div className='md:w-6/12'>
+        <DateSelector />
+      </div>
+      <div className='md:w-6/12 md:overflow-scroll md:h-full scrollbar-hide'>
+        <ScheduleWrapper />
+      </div>
       <AddScheduleModal />
     </div>
   );

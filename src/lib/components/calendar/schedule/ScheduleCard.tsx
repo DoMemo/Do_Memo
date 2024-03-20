@@ -23,6 +23,8 @@ const ScheduleCard = ({ schedule }: { schedule: Schedule }) => {
   const handleDelete = async () => {
     try {
       await CalendarService.deleteSchedule(id);
+      const result = await CalendarService.getScheduleList() as Schedule[];
+      setScheduleList(result);
     } catch (error) {
       console.log(error);
     }
@@ -51,33 +53,37 @@ const ScheduleCard = ({ schedule }: { schedule: Schedule }) => {
     }
   }, [textareaElement, text]);
   return (
-    <div className={`w-full max-w-[700px] p-2 mx-auto`}>
-      <div
-        className={`relative w-full min-h-[100px] ${color === undefined ? 'bg-white' : color} ${
-          color === undefined ? 'text-black' : ''
-        } rounded-lg pt-1 p-2 shadow-lg`}
-        onClick={handleChangeColor}
-      >
-        <div className="font-bold text-start text-lg">
-          <h3>{title}</h3>
-        </div>
-        <hr className="mb-1" />
-        <div className="w-full relative">
-          <div className="w-full h-full absolute t-0"></div>
-          <textarea
-            ref={textareaElement}
-            name="schedule"
-            id={id}
-            value={text}
-            disabled
-            className="w-full h-full bg-transparent border-none resize-none"
-          />
-        </div>
+    <div className={`w-full max-w-[700px] px-3 py-1 mx-auto overflow-hidden`}>
+      <div className='rounded bg-white shadow'>
+        <div
+          className={`relative w-full min-h-[100px] ${color === undefined ? 'bg-white' : color} text-black rounded p-4 shadow-lg`}
+          onClick={handleChangeColor}
+        >
+          <div className="font-bold text-start text-lg">
+            <h3>{title}</h3>
+          </div>
+          <div className="w-full relative">
+            <div className="w-full h-full absolute t-0"></div>
+            <textarea
+              ref={textareaElement}
+              name="schedule"
+              id={id}
+              value={text}
+              disabled
+              className="w-full h-full bg-transparent border-none resize-none"
+            />
+          </div>
 
-        <AddButton target={schedule} action={ADDTYPE.AddToTodo} />
+          <AddButton target={schedule} action={ADDTYPE.AddToTodo} />
 
-        <div className={`absolute top-0 right-0 translate-x-[30%] translate-y-[-30%] ${!isEraser && 'hidden'}`}>
-          <CancelCircleButton handleDelete={handleDelete} />
+          <div className={`absolute top-0 right-0 w-fit h-full flex items-center justify-center ${isEraser ? 'translate-x-[15px]' : 'translate-x-[150px]'} duration-300`}>
+            <button
+              className='w-[65px] h-full bg-red-500 text-white shadow text-sm font-bold'
+              onClick={handleDelete}
+            >
+              delete
+            </button>
+          </div>
         </div>
       </div>
     </div>

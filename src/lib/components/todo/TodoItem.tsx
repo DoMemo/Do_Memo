@@ -12,6 +12,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import CancelBackground from '../background/CancelBackground';
 import { FontSizeState } from 'lib/store/setting/FontState';
+import { returnToday } from 'lib/util/formatDate';
 
 const TodoItem = ({ todo, isTodo }: {
   todo: Todo;
@@ -71,7 +72,8 @@ const TodoItem = ({ todo, isTodo }: {
   const handleCheck = async () => {
     const result = await TodoService.updateTodo({
       ...todo,
-      checked: !checked
+      checked: !checked,
+      updateAt: returnToday()
     });
     if(!checked) {
       const orderList = todoOrder.filter((itemId) => itemId !== Number(id));
@@ -189,7 +191,7 @@ const TodoItem = ({ todo, isTodo }: {
               title && 
               <div className='w-full mb-2 px-1'>
                 <h3
-                  className={`text-black text-md font-bold text-start ${checked && 'line-through text-gray-400'}`}
+                  className={`text-black text-md font-bold text-start ${checked && isTodo && 'line-through text-gray-400'}`}
                 >
                   {title}
                 </h3>
@@ -201,7 +203,7 @@ const TodoItem = ({ todo, isTodo }: {
               >
                 <textarea
                   ref={textareaElement}
-                  className={`${checked && 'line-through text-gray-400'} text-black break-words w-11/12 text-start rounded px-2 py-1 border-none bg-transparent resize-none`}
+                  className={`${checked && isTodo && 'line-through text-gray-400'} text-black break-words w-11/12 text-start rounded px-2 py-1 border-none bg-transparent resize-none`}
                   onChange={(event) => handleChangeText(event)}
                   onKeyPress={(event) => handleKeyDown(event)}
                   onBlur={submit}
@@ -227,19 +229,22 @@ const TodoItem = ({ todo, isTodo }: {
             </div>
           </div>
           <div className='absolute top-[50%] right-5 translate-x-[50%] translate-y-[-50%] h-full flex items-center justify-center pr-2 h-fit'>
-            <label 
-              htmlFor={`done_${id}`}
-              className={`w-6 h-6 flex items-center justify-center rounded-lg border-2 after:text-gray-500 ${checked ? `after:content-["✔"] text-gray-500 border-gray-400` : 'border-gray-500'}`}
-            >
-              <input 
-                id={`done_${id}`}
-                className='w-5 h-5 hidden'
-                type="checkbox" 
-                name="done"
-                checked={checked}
-                onChange={handleCheck}
-              />
-            </label>
+            {
+              isTodo &&
+              <label 
+                htmlFor={`done_${id}`}
+                className={`w-6 h-6 flex items-center justify-center rounded-lg border-2 after:text-gray-500 ${checked ? `after:content-["✔"] text-gray-500 border-gray-400` : 'border-gray-500'}`}
+              >
+                <input 
+                  id={`done_${id}`}
+                  className='w-5 h-5 hidden'
+                  type="checkbox" 
+                  name="done"
+                  checked={checked}
+                  onChange={handleCheck}
+                />
+              </label>
+            }
           </div>
         </div>
       </div>

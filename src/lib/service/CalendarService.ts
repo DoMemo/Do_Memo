@@ -74,5 +74,17 @@ export class CalendarService {
     });
   }
 
+  static getActiveToday() {
+    const isActive = localStorage.getItem(INDEXED_DB.ACITVE_TODAY_SCHEDULE);
+    if(isActive) {
+      return JSON.parse(isActive);
+    }
+    return true;
+  }
+
+  static updateActiveToday(isActive: boolean) {
+    localStorage.setItem(INDEXED_DB.ACITVE_TODAY_SCHEDULE, JSON.stringify(isActive));
+  }
+
   // 내보내기 로직 schedule 을 Todo or memo 형식으로 todo/memo store에 보내는 로직 작성
 }

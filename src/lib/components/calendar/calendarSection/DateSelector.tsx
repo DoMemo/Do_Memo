@@ -44,7 +44,7 @@ const DateSelector = () => {
   }, [year, month]);
 
   return (
-    <div className="max-w-[700px] w-5/6 md:w-3/4 mx-auto">
+    <div className="max-w-[700px] w-full px-5 md:px-5 mx-auto">
       <div className="flex justify-between mt-2">
         <div>
           <select value={month} onChange={handleMonth} className="text-lg font-bold text-gray-800">
