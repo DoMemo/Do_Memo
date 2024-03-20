@@ -6,7 +6,7 @@ import { scheduleState } from 'lib/store/calendarStore/scheduleState';
 import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import { todoState } from 'lib/store/todoStore/todoState';
 import { Schedule } from 'lib/types/Schedule';
-import { Todo } from 'lib/types/todo';
+import { CreateTodo, Todo } from 'lib/types/todo';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import goToDoImg from 'assets/images/goTodo.png';
@@ -42,8 +42,7 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
   };
 
   const handleAddToTodo = async () => {
-    const todo: Todo = {
-      id: target.id,
+    const todo: CreateTodo = {
       title: target.title,
       text: target.text,
       checked: false,
@@ -63,7 +62,7 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
         return [...prev, createdTodo];
       });
       setTodoOrder((prev: number[]) => {
-        return [...prev, Number(todo.id)];
+        return [...prev, Number(createdTodo.id)];
       });
       openSuccessModal();
     } catch (error) {

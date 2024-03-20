@@ -4,6 +4,7 @@ import Starting from './pages/starting/Starting.tsx';
 import Home from './pages/home/Home.tsx';
 import MainLayout from './layout/MainLayout.tsx';
 import Calendar from './pages/calendar/Calendar.tsx';
+import History from './pages/history/History.tsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/history" element={<History />} />
           </Route>
         </Routes>
       </BrowserRouter>

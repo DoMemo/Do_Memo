@@ -22,6 +22,7 @@ const TodoList = ({ scroll }: {
 
   const getTodoList = async () => {
     const result = await TodoService.getTodoList() as Todo[];
+    // console.log(result);
     setTodoList((oldList) => {
       return [
         ...result
@@ -31,7 +32,7 @@ const TodoList = ({ scroll }: {
   const getTodoOrderList = () => {
     const orderList = localStorage.getItem(INDEXED_DB.TODO_LIST_INDEX);
     if(orderList) {
-      console.log(JSON.parse(orderList));
+      // console.log(JSON.parse(orderList));
       setTodoOrderList(JSON.parse(orderList));
       return;
     }
@@ -42,7 +43,7 @@ const TodoList = ({ scroll }: {
     getTodoOrderList();
     getTodoList();
   }, []);
-
+ 
   return (
     <FlipWrapper
       scroll={scroll}
@@ -65,7 +66,7 @@ const TodoList = ({ scroll }: {
                     return (
                       <Draggable
                         index={index}
-                        key={todo.id.toString()}
+                        key={`${todo.id.toString()}_${todo.text}`}
                         draggableId={todo.id.toString()}
                       >
                         {(provided, snapshot) => (

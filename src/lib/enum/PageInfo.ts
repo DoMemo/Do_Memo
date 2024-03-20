@@ -3,4 +3,5 @@ export enum PageInfo {
   starting = '/',
   calendar = '/calendar',
   note = '/note',
+  history = '/history',
 }

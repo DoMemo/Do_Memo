@@ -10,10 +10,9 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 const MainLayout = () => {
   const isDarkMode = useRecoilValue(darkState);
   const [ fontSize, setFontSize ] = useRecoilState(FontSizeState);
-
   useEffect(() => {
     setFontSize(SettingService.getFontSize());
-  }, [])
+  }, []);
   return (
     <div className={`flex flex-col justify-between w-full h-screen relative ${isDarkMode ? "bg-slate-950 text-white" : "bg-white"}`}>
       <AppBar />
