@@ -19,13 +19,15 @@ export const initIndexedDB = async () => {
       db = dbRequest.result;
       // oldVersion은 이전 버전의 DB 버전을 의미합니다. (1일 경우 0으로 시작)
       let oldVersion = event.oldVersion;
-
+      console.log(oldVersion);
       if (oldVersion < 1) {
+        console.log('1 생성');
         db.createObjectStore(INDEXED_DB.TODO_LIST, { keyPath: 'id', autoIncrement: true });
         db.createObjectStore(INDEXED_DB.HISTORY_LIST, { keyPath: 'id', autoIncrement: true });
       }
-
+      
       if (oldVersion < 2) {
+        console.log('2생성');
         db.createObjectStore(INDEXED_DB.CALENDAR_TODO, { keyPath: 'id', autoIncrement: true });
       }
     };

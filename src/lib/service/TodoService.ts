@@ -101,4 +101,33 @@ export class TodoService {
     }
     return [];
   }
+
+  static async getTodoHistory() {
+    return new Promise( async (resolve, reject) => {
+      const store = await getObject(INDEXED_DB.HISTORY_LIST);
+      
+      const request = store.getAll();
+      request.onsuccess = () => {
+        resolve(request.result);
+      }
+      request.onerror = (error) => {
+        reject(error)
+      }
+    });
+  }
+
+  static async createTodoHistory(todo: CreateTodo) {
+    return new Promise( async (resolve, reject) => {
+      const store = await createObject(INDEXED_DB.HISTORY_LIST);
+
+      const request = store.add(todo);
+      request.onsuccess = () => {
+        const result = request.result;
+        resolve(result);
+      }
+      request.onerror = (error) => {
+        reject(request.error);
+      } 
+    })
+  }
 }

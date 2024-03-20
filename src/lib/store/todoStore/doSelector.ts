@@ -9,9 +9,10 @@ export const uncheckedTodoList = selector({
     const todoList = get(todoState) as Todo[];
     const todoOrderList = get(todoOrderState);
     const tampList: Todo[] = [];
-
+    console.log(todoList);
     todoOrderList.forEach((id) => {
       const index = todoList.findIndex((todo) => Number(todo.id) === id);
+      console.log('select',todoList[index]);
       if(index !== -1) {
         tampList.push(todoList[index]);
       }

@@ -13,8 +13,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import CancelBackground from '../background/CancelBackground';
 import { FontSizeState } from 'lib/store/setting/FontState';
 
-const TodoItem = ({ todo }: {
+const TodoItem = ({ todo, isTodo }: {
   todo: Todo;
+  isTodo?: boolean;
 }) => {
   const { id, title, text, checked, color, type, isDone, date, prevItemId } = todo;
   const [ isDelete, setIsDelete ] = useState(false);
@@ -33,7 +34,7 @@ const TodoItem = ({ todo }: {
 
   const handleSwipe = (event: any) => {
     const swipeType = detectSwipe(event, offset, setOffset);
-    console.log(swipeType);
+    
     if(swipeType === 'left') {
       setIsActiveDelete(true);
     } else if(swipeType === 'right') {
@@ -88,6 +89,7 @@ const TodoItem = ({ todo }: {
   }
   const handleChangeColor = async () => {
     if(currentTool !== Tools.HIGHLIGHTER) return;
+    if(!isTodo) return;
 
     const isSameColor = color === currentColor.pickedColor;
 
@@ -187,7 +189,7 @@ const TodoItem = ({ todo }: {
               title && 
               <div className='w-full mb-2 px-1'>
                 <h3
-                  className={`text-md font-bold text-start ${checked && 'line-through text-gray-400'}`}
+                  className={`text-black text-md font-bold text-start ${checked && 'line-through text-gray-400'}`}
                 >
                   {title}
                 </h3>
@@ -241,23 +243,26 @@ const TodoItem = ({ todo }: {
           </div>
         </div>
       </div>
-      <div 
-        className={`absolute top-1 right-0 w-[140px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-[10px]' : 'translate-x-[150px]'} duration-300`}
-        ref={sideButtonElement}
-      >
-        <button
-          className='w-[60px] h-full bg-violet-400 text-white shadow text-sm font-bold'
-          onClick={handlEdit}
+      {
+        isTodo &&
+        <div 
+          className={`absolute top-1 right-0 w-[140px] h-[calc(100%-8px)] flex items-center justify-center ${isActiveDelete ? 'translate-x-[10px]' : 'translate-x-[150px]'} duration-300`}
+          ref={sideButtonElement}
         >
-          edit
-        </button>
-        <button
-          className='w-[60px] h-full bg-red-500 text-white shadow text-sm font-bold'
-          onClick={handleDelete}
-        >
-          delete
-        </button>
-      </div>
+          <button
+            className='w-[60px] h-full bg-violet-400 text-white shadow text-sm font-bold'
+            onClick={handlEdit}
+          >
+            edit
+          </button>
+          <button
+            className='w-[60px] h-full bg-red-500 text-white shadow text-sm font-bold'
+            onClick={handleDelete}
+          >
+            delete
+          </button>
+        </div>
+      }
     </div>
     </>
   )
