@@ -45,31 +45,62 @@ const DateSelector = () => {
 
   return (
     <div className="max-w-[700px] w-3/4 mx-auto">
-      <div className="flex justify-between pl-2 pr-2">
+      <div className="flex justify-between mt-2">
         <div>
-          <select value={year} onChange={handleYear} className="mr-2">
+          <select value={month} onChange={handleMonth} className="text-lg font-bold text-gray-800">
+            {Array.from({ length: 12 }, (_, index) => index).map((selectMonth) => {
+              const monthName = new Date(0, selectMonth).toLocaleString('en', { month: 'short' });
+              return (
+                <option key={selectMonth} value={selectMonth}>
+                  {monthName}
+                </option>
+              );
+            })}
+          </select>
+          <select value={year} onChange={handleYear} className="mr-2 ml-1 text-lg text-gray-500 font-normal">
             {Array.from({ length: 10 }, (_, index) => year - 5 + index).map((selectYear) => (
               <option key={selectYear} value={selectYear}>
                 {selectYear}
               </option>
             ))}
           </select>
-          <select value={month} onChange={handleMonth} className="mr-2">
-            {Array.from({ length: 12 }, (_, index) => index).map((selectMonth) => (
-              <option key={selectMonth} value={selectMonth}>
-                {String(selectMonth + 1).padStart(2, '0')}
-              </option>
-            ))}
-          </select>
         </div>
-        <div>
-          <button className="mr-2" onClick={handlePrevMonth}>
-            이전
+        <div className="border rounded-lg px-1">
+          <button
+            className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center"
+            onClick={handlePrevMonth}
+          >
+            <svg
+              className="h-6 w-6 text-gray-500 inline-flex leading-none"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
           </button>
-          <button onClick={handleNextMonth}>다음</button>
+          <div className="border-r inline-flex h-6"></div>
+          <button
+            onClick={handleNextMonth}
+            className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex items-center cursor-pointer hover:bg-gray-200 p-1"
+          >
+            <svg
+              className="h-6 w-6 text-gray-500 inline-flex leading-none"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
         </div>
       </div>
-      <MonthSection dayArray={monthDaysArray} currentMonth={month + 1} />
+      <MonthSection
+        dayArray={monthDaysArray}
+        currentMonth={month + 1}
+        prevDays={getDaysInPrevMonth(year, month).length}
+        nextDays={getDaysInNextMonth(year, month).length}
+      />
     </div>
   );
 };

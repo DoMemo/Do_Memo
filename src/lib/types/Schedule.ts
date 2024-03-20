@@ -2,7 +2,7 @@ import { PICKER_COLOR } from 'lib/enum/PickerColor';
 
 export interface Schedule {
   id: string;
-  title: string;
+  title: string | undefined;
   text: string;
   color: PICKER_COLOR | undefined;
   type: string;
@@ -13,7 +13,7 @@ export interface Schedule {
   };
 }
 export interface CreateSchedule {
-  title: string;
+  title: string | undefined;
   text: string;
   color: PICKER_COLOR | undefined;
   type: string;

@@ -1,4 +1,6 @@
+import AddButton from 'lib/components/ui/button/AddButton';
 import CancelCircleButton from 'lib/components/ui/button/CancelCircleButton';
+import { ADDTYPE } from 'lib/enum/AddType';
 import { Tools } from 'lib/enum/Tools';
 import { CalendarService } from 'lib/service/CalendarService';
 import { scheduleState } from 'lib/store/calendarStore/scheduleState';
@@ -68,6 +70,9 @@ const ScheduleCard = ({ schedule }: { schedule: Schedule }) => {
             disabled
             className="w-full h-full bg-transparent border-none resize-none"
           />
+        </div>
+        <div className="absolute top-0 right-5">
+          <AddButton target={schedule} action={ADDTYPE.AddToTodo} />
         </div>
         <div className={`absolute top-0 right-0 translate-x-[30%] translate-y-[-30%] ${!isEraser && 'hidden'}`}>
           <CancelCircleButton handleDelete={handleDelete} />
