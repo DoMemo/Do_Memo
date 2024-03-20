@@ -1,6 +1,7 @@
-import { atom } from "recoil";
+import { returnToday } from 'lib/util/formatDate';
+import { atom } from 'recoil';
 
 export const currentDateState = atom({
   key: 'currentDateState',
-  default: new Date(),
-})
+  default: returnToday(),
+});

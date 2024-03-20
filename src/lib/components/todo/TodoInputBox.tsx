@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import CommonInput from '../ui/input/CommonInput'
+import React, { useEffect, useState } from 'react';
+import CommonInput from '../ui/input/CommonInput';
 import CommonSubmitButton from '../ui/button/CommonSubmitButton';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toolState } from 'lib/store/ToolState';
@@ -15,20 +15,20 @@ import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import { darkState } from 'lib/store/setting/DarkState';
 
 const TodoInputBox = () => {
-  const [ value, setValue ] = useState<string>('');
-  const [ mount, setMount ] = useState<boolean>(false);
-  const [ isFocus, setIsFocus ] = useState<boolean>(false);
-  const [ activeTool, setActiveTool ] = useRecoilState(toolState);
-  const [ todoList, setTodoList ] = useRecoilState(todoState);
-  const [ todoOrder, setTodoOrder ] = useRecoilState(todoOrderState);
+  const [value, setValue] = useState<string>('');
+  const [mount, setMount] = useState<boolean>(false);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [activeTool, setActiveTool] = useRecoilState(toolState);
+  const [todoList, setTodoList] = useRecoilState(todoState);
+  const [todoOrder, setTodoOrder] = useRecoilState(todoOrderState);
   const isDarkMode = useRecoilValue(darkState);
 
   const returnLastItemId = () => {
-    if(todoList.length === 0) return undefined;
+    if (todoList.length === 0) return undefined;
     return todoList[todoList.length - 1].id;
-  }
+  };
   const handleSubmit = async () => {
-    if(!value) return;
+    if (!value) return;
     const input = {
       title: undefined,
       text: value,
@@ -38,35 +38,33 @@ const TodoInputBox = () => {
       type: TYPE.todo,
       isDone: false,
       date: returnToday(),
-    }
-    const result = await TodoService.createTodo(input) as Todo;
-    if(result) {
+      link: {
+        type: TYPE.todo,
+        id: undefined,
+      },
+    };
+    const result = (await TodoService.createTodo(input)) as Todo;
+    if (result) {
       setTodoOrder((oldList: number[]) => {
-        return [
-          ...oldList,
-          Number(result.id)
-        ]
-      })
+        return [...oldList, Number(result.id)];
+      });
       setTodoList((oldList) => {
-        return [
-          ...oldList,
-          result
-        ]
+        return [...oldList, result];
       });
     }
     setValue('');
-  }
+  };
 
   const isActive = () => {
     return activeTool === Tools.PEN;
-  }
+  };
 
   const handleCancel = () => {
     setActiveTool(Tools.NONE);
-  }
+  };
 
   useEffect(() => {
-    if(activeTool === Tools.PEN) {
+    if (activeTool === Tools.PEN) {
       setMount(true);
       setIsFocus(true);
     } else {
@@ -77,33 +75,29 @@ const TodoInputBox = () => {
   }, [activeTool]);
   return (
     <>
-      {
-        mount &&
+      {mount && (
         <>
-          <CancelBackground 
-            handleCancel={handleCancel}
-          />
-          <div className='absolute top-0 left-0 w-full overflow-hidden z-40 flex justify-center pt-2'>
+          <CancelBackground handleCancel={handleCancel} />
+          <div className="absolute top-0 left-0 w-full overflow-hidden z-40 flex justify-center pt-2">
             <div
-              className={`relative w-[calc(100%-10px)] flex flex-row justify-between items-center gap-2 p-1 bg-white rounded ${isActive() ? 'animate-slide-down' : ' animate-slide-up'} z-40`}
+              className={`relative w-[calc(100%-10px)] flex flex-row justify-between items-center gap-2 p-1 bg-white rounded ${
+                isActive() ? 'animate-slide-down' : ' animate-slide-up'
+              } z-40`}
             >
-              <CommonInput 
+              <CommonInput
                 value={value}
                 setValue={setValue}
                 isShadow={false}
                 isFocus={isFocus}
                 handleSubmit={handleSubmit}
               />
-              <CommonSubmitButton 
-                handleClick={handleSubmit}
-                isShadow
-              />
+              <CommonSubmitButton handleClick={handleSubmit} isShadow />
             </div>
           </div>
         </>
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
-export default TodoInputBox
+export default TodoInputBox;
