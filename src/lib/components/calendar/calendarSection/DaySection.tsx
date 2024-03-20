@@ -33,9 +33,9 @@ const DaySection = ({ day, isPrevDay, isNextDay }: { day: string; isPrevDay: boo
       onClick={handleClick}
     >
       <div
-        className={`inline-block rounded-full flex item-center justify-center text-[0.5rem] md:text-sm ${
+        className={`inline-block rounded-full flex item-center justify-center text-[0.6rem] md:text-sm ${
           onToday ? 'text-white' : ''
-        } ${onToday ? 'bg-blue-500' : ''} w-3 h-3 md:w-6 md:h-6 mt-1 ml-1 hover:bg-blue-300 items-center`}
+        } ${onToday ? 'bg-blue-500' : ''} w-4 h-4 md:w-6 md:h-6 mt-1 ml-1 hover:bg-blue-300 items-center`}
       >
         {date}
       </div>

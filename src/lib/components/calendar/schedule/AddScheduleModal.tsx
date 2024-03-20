@@ -1,12 +1,15 @@
 import CancelBackground from 'lib/components/background/CancelBackground';
+import CommonSubmitButton from 'lib/components/ui/button/CommonSubmitButton';
+import CommonInput from 'lib/components/ui/input/CommonInput';
 import { Tools } from 'lib/enum/Tools';
 import { TYPE } from 'lib/enum/Type';
 import { CalendarService } from 'lib/service/CalendarService';
 import { selectedDateState } from 'lib/store/calendarStore/selectedDateState';
+import { darkState } from 'lib/store/setting/DarkState';
 import { toolState } from 'lib/store/ToolState';
 import { CreateSchedule, Schedule } from 'lib/types/Schedule';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const AddScheduleModal = () => {
   const [activeTool, setActiveTool] = useRecoilState(toolState);
@@ -27,6 +30,10 @@ const AddScheduleModal = () => {
     setContent(event.target.value);
   };
 
+  const handleModalClose = () => {
+    setActiveTool(Tools.NONE);
+  };
+
   const addSchedule = async () => {
     const newSchedule: CreateSchedule = {
       title: title,
@@ -44,10 +51,7 @@ const AddScheduleModal = () => {
 
     setTitle('');
     setContent('');
-  };
-
-  const handleModalClose = () => {
-    setActiveTool(Tools.NONE);
+    handleModalClose();
   };
 
   useEffect(() => {
@@ -60,17 +64,15 @@ const AddScheduleModal = () => {
       {isShow && (
         <>
           <CancelBackground handleCancel={handleModalClose} />
-          <div className="absolute top-0 left-1/4 p-4 bg-gray-400 z-40">
+          <div className="absolute top-3 left-[50%] translate-x-[-50%] p-4 bg-gray-300 z-40 rounded-2xl w-2/3 md:w-3/5 max-w-[650px]">
+            <div className="text-lg font-semibold font-mono  text-gray-800 mb-2">Add Schedule</div>
             <div>
-              <h2>일정 추가</h2>
+              <CommonInput value={title} setValue={setTitle} onChange={handleScheduleTitle} />
             </div>
-            <div>
-              <textarea value={title} onChange={handleScheduleTitle} />
+            <div className="mb-2">
+              <CommonInput value={content} setValue={setContent} onChange={handleScheduleContent} />
             </div>
-            <div>
-              <textarea value={content} onChange={handleScheduleContent} />
-            </div>
-            <button onClick={addSchedule}>일정 추가!</button>
+            <CommonSubmitButton handleClick={addSchedule}></CommonSubmitButton>
           </div>
         </>
       )}

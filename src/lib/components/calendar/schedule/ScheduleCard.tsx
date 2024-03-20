@@ -51,9 +51,11 @@ const ScheduleCard = ({ schedule }: { schedule: Schedule }) => {
     }
   }, [textareaElement, text]);
   return (
-    <div className={`w-full p-2`}>
+    <div className={`w-full max-w-[700px] p-2 mx-auto`}>
       <div
-        className={`relative w-full min-h-[100px] ${color} rounded-lg pt-1 p-2 shadow-lg`}
+        className={`relative w-full min-h-[100px] ${color === undefined ? 'bg-white' : color} ${
+          color === undefined ? 'text-black' : ''
+        } rounded-lg pt-1 p-2 shadow-lg`}
         onClick={handleChangeColor}
       >
         <div className="font-bold text-start text-lg">
@@ -71,9 +73,9 @@ const ScheduleCard = ({ schedule }: { schedule: Schedule }) => {
             className="w-full h-full bg-transparent border-none resize-none"
           />
         </div>
-        <div className="absolute top-0 right-5">
-          <AddButton target={schedule} action={ADDTYPE.AddToTodo} />
-        </div>
+
+        <AddButton target={schedule} action={ADDTYPE.AddToTodo} />
+
         <div className={`absolute top-0 right-0 translate-x-[30%] translate-y-[-30%] ${!isEraser && 'hidden'}`}>
           <CancelCircleButton handleDelete={handleDelete} />
         </div>
