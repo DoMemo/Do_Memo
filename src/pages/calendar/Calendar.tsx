@@ -3,7 +3,7 @@ import React from 'react';
 
 const Calendar = () => {
   return (
-    <div>
+    <div className={`w-full max-h-full relative`}>
       <CalendarContainer />
     </div>
   );

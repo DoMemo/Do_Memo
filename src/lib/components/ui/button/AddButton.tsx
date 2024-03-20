@@ -8,7 +8,12 @@ import { todoState } from 'lib/store/todoStore/todoState';
 import { Schedule } from 'lib/types/Schedule';
 import { Todo } from 'lib/types/todo';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import goToDoImg from 'assets/images/goTodo.png';
+import goToDoImgWhite from 'assets/images/goTodo_white.png';
+import goScheduleImg from 'assets/images/goSchedule.png';
+import goScheduleImgWhite from 'assets/images/goSchedule_white.png';
+import { darkState } from 'lib/store/setting/DarkState';
 
 const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYPE }) => {
   const [todoList, setTodoList] = useRecoilState(todoState);
@@ -16,6 +21,8 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
   const [scheduleList, setScheduleList] = useRecoilState(scheduleState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [btnImg, setBtnImg] = useState<string>('');
+  const isDarkMode = useRecoilValue(darkState);
 
   const openSuccessModal = () => {
     setIsModalOpen(true);
@@ -42,7 +49,7 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
       checked: false,
       color: target.color,
       prevItemId: undefined,
-      type: TYPE.todo,
+      type: target.type,
       isDone: false,
       date: target.date,
       link: {
@@ -70,7 +77,7 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
       title: target.title,
       text: target.text,
       color: target.color,
-      type: TYPE.schedule,
+      type: target.type,
       date: target.date,
       link: {
         type: target.link.type,
@@ -90,12 +97,31 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
   };
 
   useEffect(() => {
-    handleBtnImage(action);
-  }, []);
+    if (!isDarkMode) {
+      switch (action) {
+        case ADDTYPE.AddToTodo:
+          setBtnImg(goToDoImg);
+          break;
+        case ADDTYPE.AddToSchedule:
+          setBtnImg(goScheduleImg);
+          break;
+      }
+    } else {
+      switch (action) {
+        case ADDTYPE.AddToTodo:
+          setBtnImg(goToDoImgWhite);
+          break;
+        case ADDTYPE.AddToSchedule:
+          setBtnImg(goScheduleImgWhite);
+          break;
+      }
+    }
+  }, [isDarkMode]);
 
   return (
     <div>
       <button
+        className={`absolute top-1 right-2`}
         onClick={() => {
           switch (action) {
             case ADDTYPE.AddToTodo:
@@ -109,13 +135,20 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
           }
         }}
       >
-        넘기기!
+        <img
+          src={`${target.color ? btnImg : action === ADDTYPE.AddToTodo ? goToDoImg : goScheduleImg}`}
+          className="w-[25px] h-[25px] cover"
+        />
       </button>
       {/* 모달 */}
       {isModalOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-slate-200/50">
+        <div className="fixed top-0 left-0 w-full h-full bg-slate-200/50 z-50">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg">
-            {isSuccess ? <p>성공</p> : <p>실패</p>}
+            {isSuccess ? (
+              <div className={`${isDarkMode ? 'text-black' : ''}`}>성공</div>
+            ) : (
+              <div className={`${isDarkMode ? 'text-black' : ''}`}>실패</div>
+            )}
           </div>
         </div>
       )}
@@ -123,21 +156,4 @@ const AddButton = ({ target, action }: { target: Todo | Schedule; action: ADDTYP
   );
 };
 
-// 버튼 이미지 만들기
-function handleBtnImage(action: ADDTYPE) {
-  let buttonImage;
-  switch (action) {
-    case ADDTYPE.AddToTodo:
-      buttonImage = require('../../../../assets/images/goTodo.png').default;
-      console.log(buttonImage);
-      return buttonImage;
-    // case ADDTYPE.AddToNote:
-    //   buttonImage = 'image_note.png';
-    //   break;
-    case ADDTYPE.AddToSchedule:
-      buttonImage = require('../../../../assets/images/goSchedule.png').default;
-
-      return buttonImage;
-  }
-}
 export default AddButton;
