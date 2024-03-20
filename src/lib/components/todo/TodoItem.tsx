@@ -3,12 +3,15 @@ import { Tools } from 'lib/enum/Tools';
 import { TodoService } from 'lib/service/TodoService';
 import { toolState } from 'lib/store/ToolState';
 import { colorState } from 'lib/store/colorStore/colorState';
+import { darkState } from 'lib/store/setting/DarkState';
 import { todoOrderState } from 'lib/store/todoStore/todoOrderState';
 import { todoState } from 'lib/store/todoStore/todoState';
 import { Todo } from 'lib/types/todo'
 import detectSwipe from 'lib/util/detectSwipe';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
+import CancelBackground from '../background/CancelBackground';
+import { FontSizeState } from 'lib/store/setting/FontState';
 
 const TodoItem = ({ todo, isTodo }: {
   todo: Todo;
@@ -19,15 +22,19 @@ const TodoItem = ({ todo, isTodo }: {
   const [ todoList, setTodoList ] = useRecoilState(todoState);
   const [ todoOrder, setTodoOrder ] = useRecoilState(todoOrderState);
   const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
+  const [ textValue, setTextValue ] = useState(text);
   const [ offset, setOffset ] = useState(null);
   const [ isActiveDelete, setIsActiveDelete ] = useState(false);
   const textareaElement = useRef<HTMLTextAreaElement>(null);
+  const sideButtonElement = useRef<HTMLDivElement>(null);
   const currentColor = useRecoilValue(colorState);
-  const currentTool = useRecoilValue(toolState);
+  const [ currentTool, setCurrentTool ] = useRecoilState(toolState);
+  const fontSize = useRecoilValue(FontSizeState);
+  const isDarkMode = useRecoilValue(darkState);
 
   const handleSwipe = (event: any) => {
     const swipeType = detectSwipe(event, offset, setOffset);
-    console.log(swipeType);
+    
     if(swipeType === 'left') {
       setIsActiveDelete(true);
     } else if(swipeType === 'right') {
@@ -49,10 +56,17 @@ const TodoItem = ({ todo, isTodo }: {
             ...oldList.filter((todo: Todo) => todo.id !== id)
           ];
         });
-      }, 250)
+      }, 200)
     } catch (error) {
       alert('삭제에 실패했습니다.');
     }
+  }
+  const handlEdit = () => {
+    setIsActiveDelete(false);
+    setIsEditMode(true);
+    setCurrentTool(Tools.NONE);
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.focus();
   }
   const handleCheck = async () => {
     const result = await TodoService.updateTodo({
@@ -87,7 +101,50 @@ const TodoItem = ({ todo, isTodo }: {
     const newList = await TodoService.getTodoList() as Todo[];
     setTodoList([...newList]);
   }
-  
+  const resizeTextarea = (init?: string) => {
+    if(init === 'init') {
+      if(textareaElement.current) {
+        textareaElement.current.style.height = 'auto';
+        textareaElement.current.style.height = '40px';
+      }
+    }
+    if(textareaElement.current) {
+      textareaElement.current.style.height = 'auto';
+      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
+    }
+  }
+  const handleChangeText = (event: React.ChangeEvent<HTMLTextAreaElement> ) => {
+    setTextValue(event.target.value);
+    resizeTextarea();
+  }
+  const submit = async () => {
+    const input = {
+      ...todo,
+      text: textValue,
+    }
+    const result = await TodoService.updateTodo(input);
+    
+    if(!result) return;
+    const newList = await TodoService.getTodoList() as Todo[];
+    
+    if(!newList) return;
+    setTodoList(newList);
+    setIsEditMode(false);
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.blur();
+  }
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if(event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      submit();
+      resizeTextarea('init');
+    }
+  }
+  const handleCancel = () => {
+    setIsEditMode(false);
+    submit();
+  }
+
   useEffect(() => {
     if(currentTool === Tools.ERASER) {
       setIsActiveDelete(true);
@@ -97,14 +154,23 @@ const TodoItem = ({ todo, isTodo }: {
   }, [currentTool])
 
   useEffect(() => {
-    if(textareaElement.current) {
-      textareaElement.current.style.height = 'auto';
-      textareaElement.current.style.height = `${textareaElement.current.scrollHeight}px`;
-    }
+    resizeTextarea();
   }, [textareaElement])
+  useEffect(() => {
+    if(!textareaElement || !textareaElement.current) return;
+    textareaElement.current.style.fontSize = (fontSize + 'px');
+    resizeTextarea();
+  }, [fontSize]);
   return (
+    <>
+    {
+      isEditMode && 
+      <CancelBackground 
+        handleCancel={handleCancel}
+      />
+    }
     <div 
-      className={`relative w-full min-h-[50px] duration-300 ${isDelete && 'animate-slide-right'} p-2 overflow-hidden px-3 py-1`}
+      className={`relative w-full min-h-[50px] duration-300 ${isDelete && 'animate-slide-right'} p-2 overflow-hidden px-3 py-1 ${isEditMode ? "z-40 scale-110" : "z-10"}`}
       onTouchStart={handleSwipe}
       onTouchEnd={handleSwipe}
       onMouseDown={handleSwipe}
@@ -112,7 +178,7 @@ const TodoItem = ({ todo, isTodo }: {
       onMouseUp={handleSwipe}
     >
       <div
-        className='w-full bg-white rounded'
+        className={`w-full bg-white rounded`}
       >
         <div className={`relative w-full flex flex-row items-center shadow-md ${color} p-2 rounded`}>
           <div
@@ -136,21 +202,25 @@ const TodoItem = ({ todo, isTodo }: {
                 <textarea
                   ref={textareaElement}
                   className={`${checked && 'line-through text-gray-400'} text-black break-words w-11/12 text-start rounded px-2 py-1 border-none bg-transparent resize-none`}
-                  value={text}
-                  readOnly
-                  draggable={true}
+                  onChange={(event) => handleChangeText(event)}
+                  onKeyPress={(event) => handleKeyDown(event)}
+                  onBlur={submit}
+                  value={textValue}
                 />
-                <div className='absolute top-0 left-0 w-11/12 h-full'></div>
+                {
+                  !isEditMode &&
+                  <div className='absolute top-0 left-0 w-11/12 h-full'></div>
+                }
               </div>
             </div>
             <div className='w-full text-start flex flex-row justify-between'>
               <span
-                className='text-xs text-gray-600 text-start w-full px-2'
+                className='text-xs text-gray-700 text-start w-full px-2'
               >
                 {date}
               </span>
               <span
-                className='text-[10px] text-gray-400 text-start px-2'
+                className='text-[10px] text-gray-700 text-start'
               >
                 {type.toUpperCase()}
               </span>
@@ -159,7 +229,7 @@ const TodoItem = ({ todo, isTodo }: {
           <div className='absolute top-[50%] right-5 translate-x-[50%] translate-y-[-50%] h-full flex items-center justify-center pr-2 h-fit'>
             <label 
               htmlFor={`done_${id}`}
-              className={`w-6 h-6 flex items-center justify-center rounded-lg border-2 after:text-gray-400 ${checked ? `after:content-["✔"] text-gray-400 border-gray-300` : 'border-gray-500'}`}
+              className={`w-6 h-6 flex items-center justify-center rounded-lg border-2 after:text-gray-500 ${checked ? `after:content-["✔"] text-gray-500 border-gray-400` : 'border-gray-500'}`}
             >
               <input 
                 id={`done_${id}`}
@@ -194,6 +264,7 @@ const TodoItem = ({ todo, isTodo }: {
         </div>
       }
     </div>
+    </>
   )
 }
 
